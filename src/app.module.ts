@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
 
-import redisStore from 'cache-manager-ioredis';
+import { redisStore } from 'cache-manager-redis-yet';
 
 import { AppController } from './app.controller';
 import { RepositoryModule } from './repository/repository.module';
@@ -16,12 +16,10 @@ import { DashboardModule } from './dashboard/dashboard.module';
     }),
     process.env.ENABLE_REDIS === '1'
       ? CacheModule.register({
-          store: redisStore,
-          host: process.env.REDIS_HOST,
-          port: Number(process.env.REDIS_PORT),
-          password: process.env.REDIS_PASSWORD,
-
           isGlobal: true,
+
+          store: redisStore,
+          url: process.env.REDIS_URI,
         })
       : CacheModule.register({
           isGlobal: true,
