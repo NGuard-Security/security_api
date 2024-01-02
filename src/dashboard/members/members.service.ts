@@ -67,7 +67,7 @@ export class MembersService {
           ),
       );
 
-      await this.cacheManager.set(`members:${guildId}`, data, 60 * 60 * 1000);
+      await this.cacheManager.set(`members:${guildId}`, data, 15 * 60 * 1000);
 
       this.logger.debug(`Members cache set => ${JSON.stringify(data)}`);
       membersList = data;

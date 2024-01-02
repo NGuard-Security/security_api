@@ -70,7 +70,7 @@ export class SummaryService {
           ),
       );
 
-      await this.cacheManager.set(`members:${id}`, data, 60 * 60 * 1000);
+      await this.cacheManager.set(`members:${id}`, data, 15 * 60 * 1000);
 
       this.logger.debug(`Members cache set => ${JSON.stringify(data)}`);
       membersList = data;

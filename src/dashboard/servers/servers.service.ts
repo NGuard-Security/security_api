@@ -79,7 +79,7 @@ export class ServersService {
           ),
       );
 
-      await this.cacheManager.set(`userguilds:${userId}`, data, 60 * 60 * 1000);
+      await this.cacheManager.set(`userguilds:${userId}`, data, 15 * 60 * 1000);
 
       this.logger.debug(`User Guilds cache set => ${JSON.stringify(data)}`);
       userGuilds = data;

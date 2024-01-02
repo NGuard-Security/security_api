@@ -74,7 +74,7 @@ export class VerifyService {
           ),
       );
 
-      await this.cacheManager.set(`guild:${id}`, data, 60 * 60 * 1000);
+      await this.cacheManager.set(`guild:${id}`, data, 15 * 60 * 1000);
 
       this.logger.debug(`Guild cache set => ${JSON.stringify(data)}`);
       guildData = data;

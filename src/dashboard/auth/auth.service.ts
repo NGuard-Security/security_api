@@ -130,7 +130,7 @@ export class AuthService {
           ),
       );
 
-      await this.cacheManager.set(`userguilds:${userId}`, data, 60 * 60 * 1000);
+      await this.cacheManager.set(`userguilds:${userId}`, data, 15 * 60 * 1000);
 
       this.logger.debug(`UserGuild cache set => ${JSON.stringify(data)}`);
       currentUserGuild = data;
@@ -186,7 +186,7 @@ export class AuthService {
             ),
         );
 
-        await this.cacheManager.set(`guild:${guildId}`, data, 60 * 60 * 1000);
+        await this.cacheManager.set(`guild:${guildId}`, data, 15 * 60 * 1000);
 
         this.logger.debug(`Guild cache set => ${JSON.stringify(data)}`);
         guildData = data;
