@@ -79,6 +79,11 @@ export class ServersService {
       userGuilds = data;
     }
 
+    // 권한 있는 서버만 필터링
+    userGuilds = userGuilds.filter(
+      (guild) => (Number(guild.permissions) & 0x20) == 0x20 || guild.owner,
+    );
+
     let botGuilds: RESTGetAPICurrentUserGuildsResult = [];
 
     const cachedBotGuilds =
@@ -144,17 +149,6 @@ export class ServersService {
       await this.cacheManager.set('bot-guilds', data, 300);
       botGuilds = data;
     }
-
-    // 권한 확인
-    userGuilds.forEach((guild) => {
-      if ((Number(guild.permissions) & 0x20) != 0x20) {
-        if (!guild.owner) {
-          // 서버에서 권한이 없는 경우임.
-          // userGuilds 배열에서 제거함.
-          userGuilds.splice(userGuilds.indexOf(guild), 1);
-        }
-      }
-    });
 
     // 봇이 초대되어있는지 확인
     userGuilds.forEach((guild) => {
