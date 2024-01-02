@@ -36,6 +36,10 @@ export class ServersService {
       );
 
     if (cachedCurrentUserGuild) {
+      this.logger.debug(
+        `Cached User Guilds => ${JSON.stringify(cachedCurrentUserGuild)}`,
+      );
+
       userGuilds = cachedCurrentUserGuild;
     } else {
       const { data } = await firstValueFrom(
@@ -76,6 +80,8 @@ export class ServersService {
       );
 
       await this.cacheManager.set(`userguilds:${userId}`, data, 3600);
+
+      this.logger.debug(`User Guilds cache set => ${JSON.stringify(data)}`);
       userGuilds = data;
     }
 
@@ -92,6 +98,10 @@ export class ServersService {
       );
 
     if (cachedBotGuilds) {
+      this.logger.debug(
+        `Cached Bot Guilds => ${JSON.stringify(cachedBotGuilds)}`,
+      );
+
       botGuilds = cachedBotGuilds;
     } else {
       const data = [];
@@ -147,6 +157,8 @@ export class ServersService {
       }
 
       await this.cacheManager.set('bot-guilds', data, 300);
+
+      this.logger.debug(`Bot Guilds cache set => ${JSON.stringify(data)}`);
       botGuilds = data;
     }
 

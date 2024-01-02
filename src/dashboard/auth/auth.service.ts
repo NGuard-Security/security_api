@@ -87,6 +87,10 @@ export class AuthService {
       );
 
     if (cachedCurrentUserGuild) {
+      this.logger.debug(
+        `Cached UserGuild => ${JSON.stringify(cachedCurrentUserGuild)}`,
+      );
+
       currentUserGuild = cachedCurrentUserGuild;
     } else {
       const { data } = await firstValueFrom(
@@ -127,6 +131,8 @@ export class AuthService {
       );
 
       await this.cacheManager.set(`userguilds:${userId}`, data, 3600);
+
+      this.logger.debug(`UserGuild cache set => ${JSON.stringify(data)}`);
       currentUserGuild = data;
     }
 
@@ -144,6 +150,8 @@ export class AuthService {
       );
 
       if (cachedGuildData) {
+        this.logger.debug(`Cached Guild => ${JSON.stringify(cachedGuildData)}`);
+
         guildData = cachedGuildData;
       } else {
         const { data } = await firstValueFrom(
@@ -179,6 +187,8 @@ export class AuthService {
         );
 
         await this.cacheManager.set(`guild:${guildId}`, data, 3600);
+
+        this.logger.debug(`Guild cache set => ${JSON.stringify(data)}`);
         guildData = data;
       }
 

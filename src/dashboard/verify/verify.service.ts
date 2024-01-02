@@ -38,6 +38,8 @@ export class VerifyService {
     );
 
     if (cachedGuildData) {
+      this.logger.debug(`Cached Guild Data => ${JSON.stringify(guildData)}`);
+
       guildData = cachedGuildData;
     } else {
       const { data } = await firstValueFrom(
@@ -73,6 +75,8 @@ export class VerifyService {
       );
 
       await this.cacheManager.set(`guild:${id}`, data, 3600);
+
+      this.logger.debug(`Guild cache set => ${JSON.stringify(data)}`);
       guildData = data;
     }
 

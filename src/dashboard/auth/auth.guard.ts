@@ -46,6 +46,8 @@ export class AuthGuard implements CanActivate {
       const cachedUser = await this.cacheManager.get<APIUser>(`user:${token}`);
 
       if (cachedUser) {
+        this.logger.debug(`Cached User => ${JSON.stringify(cachedUser)}`);
+
         request['user'] = cachedUser;
         return true;
       }
@@ -69,6 +71,8 @@ export class AuthGuard implements CanActivate {
       );
 
       await this.cacheManager.set(`user:${token}`, data, 3600);
+
+      this.logger.debug(`User cache set => ${JSON.stringify(data)}`);
       request['user'] = data;
     } catch (e) {
       if (e instanceof AxiosError && e.response?.status === 429) {

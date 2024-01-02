@@ -38,6 +38,10 @@ export class SummaryService {
     );
 
     if (cachedMembersList) {
+      this.logger.debug(
+        `Cached Members List => ${JSON.stringify(membersList)}`,
+      );
+
       membersList = cachedMembersList;
     } else {
       const { data } = await firstValueFrom(
@@ -67,6 +71,8 @@ export class SummaryService {
       );
 
       await this.cacheManager.set(`members:${id}`, data, 3600);
+
+      this.logger.debug(`Members cache set => ${JSON.stringify(data)}`);
       membersList = data;
     }
 

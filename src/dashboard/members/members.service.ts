@@ -35,6 +35,10 @@ export class MembersService {
     );
 
     if (cachedMembersList) {
+      this.logger.debug(
+        `Cached Members List => ${JSON.stringify(membersList)}`,
+      );
+
       membersList = cachedMembersList;
     } else {
       const { data } = await firstValueFrom(
@@ -64,6 +68,8 @@ export class MembersService {
       );
 
       await this.cacheManager.set(`members:${guildId}`, data, 3600);
+
+      this.logger.debug(`Members cache set => ${JSON.stringify(data)}`);
       membersList = data;
     }
 
