@@ -70,7 +70,7 @@ export class AuthGuard implements CanActivate {
           ),
       );
 
-      await this.cacheManager.set(`user:${token}`, data, 3600);
+      await this.cacheManager.set(`user:${token}`, data, 60 * 60 * 1000);
 
       this.logger.debug(`User cache set => ${JSON.stringify(data)}`);
       request['user'] = data;
