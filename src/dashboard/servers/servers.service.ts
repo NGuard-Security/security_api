@@ -156,7 +156,7 @@ export class ServersService {
         }
       }
 
-      await this.cacheManager.set('bot-guilds', data, 300);
+      await this.cacheManager.set('bot-guilds', data, 5 * 60 * 1000);
 
       this.logger.debug(`Bot Guilds cache set => ${JSON.stringify(data)}`);
       botGuilds = data;
