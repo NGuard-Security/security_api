@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
   Logger,
+  Post,
   Query,
   Request,
   UseGuards,
@@ -30,7 +31,7 @@ export class AuthController {
 
   constructor(private readonly authService: AuthService) {}
 
-  @Get('callback')
+  @Post('callback')
   @ApiOperation({
     summary: 'Discord OAuth2 Callback',
     description: 'Discord의 OAuth2 로그인의 콜백을 처리합니다.',
