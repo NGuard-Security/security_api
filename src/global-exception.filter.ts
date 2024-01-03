@@ -26,7 +26,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       message = exception.getResponse();
     }
 
-    if (status !== HttpStatus['TOO_MANY_REQUESTS']) {
+    if (
+      status === HttpStatus['BAD_REQUEST'] || // HTTP 400, 401, 5xx 에 대해서만 로그를 보낸다.
+      status === HttpStatus['UNAUTHORIZED'] ||
+      status.toString().startsWith('5')
+    ) {
       try {
         let content =
           '<@&1020555721005334570>\n\n:warning: **[오류 로그]** \n\n';
