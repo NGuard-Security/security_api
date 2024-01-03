@@ -6,7 +6,7 @@ export interface IUsers {
   oauth: string;
   verify: string;
   ip: string;
-  date: Date;
+  registeredAt: Date;
 }
 
 export const UsersSchema = new mongoose.Schema<IUsers>({
@@ -24,7 +24,7 @@ export const UsersSchema = new mongoose.Schema<IUsers>({
     type: String,
     required: true,
   },
-  date: {
+  registeredAt: {
     type: Date,
     required: true,
     default: Date.now,
