@@ -120,7 +120,7 @@ export class SummaryService {
     dbUsers.forEach((user) => {
       // 사용자가 최근 1년 이내에 접속했는지 확인합니다.
       if (
-        user.registeredAt > new Date(Date.now() - 1000 * 60 * 60 * 24 * 365)
+        new Date(user.registeredAt).getTime() > new Date(Date.now() - 1000 * 60 * 60 * 24 * 365).getTime()
       ) {
         // 사용자가 접속한 월을 가져옵니다.
         const userMonth = new Date(user.registeredAt).getMonth();
