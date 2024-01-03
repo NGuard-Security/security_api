@@ -103,7 +103,7 @@ export class SummaryService {
 
     const newUsers = dbUsers.filter(
       (user) =>
-        new Date().getTime() - new Date(user.date).getTime() <
+        new Date().getTime() - new Date(user.registeredAt).getTime() <
         1000 * 60 * 60 * 24 * 30,
     );
 
@@ -119,9 +119,11 @@ export class SummaryService {
 
     dbUsers.forEach((user) => {
       // 사용자가 최근 1년 이내에 접속했는지 확인합니다.
-      if (user.date > new Date(Date.now() - 1000 * 60 * 60 * 24 * 365)) {
+      if (
+        user.registeredAt > new Date(Date.now() - 1000 * 60 * 60 * 24 * 365)
+      ) {
         // 사용자가 접속한 월을 가져옵니다.
-        const userMonth = new Date(user.date).getMonth();
+        const userMonth = new Date(user.registeredAt).getMonth();
 
         // 해당 월이 배열에 있는지 확인하고, 있다면 카운터를 증가시킵니다.
         const index = months.indexOf(userMonth);
