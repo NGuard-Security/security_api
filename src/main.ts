@@ -7,7 +7,7 @@ import { version } from '../package.json';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  if (process.env.SWAGGER !== '0') {
+  if (process.env.ENABLE_SWAGGER !== '0') {
     const config = new DocumentBuilder()
       .setTitle('NGuard Security API')
       .setDescription('NGuard Security 서비스를 위한 백엔드 RestAPI 입니다.')
