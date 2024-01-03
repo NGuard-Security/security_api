@@ -27,8 +27,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
 
     if (
-      status === HttpStatus['BAD_REQUEST'] || // HTTP 400, 401, 5xx 에 대해서만 로그를 보낸다.
-      status === HttpStatus['UNAUTHORIZED'] ||
+      status === HttpStatus['BAD_REQUEST'] || // HTTP 400, 5xx 에 대해서만 로그를 보낸다.
       status.toString().startsWith('5')
     ) {
       try {
