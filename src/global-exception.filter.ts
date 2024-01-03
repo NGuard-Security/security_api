@@ -51,7 +51,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     response.status(status).json({
       code: APIErrorCodes[String(status)],
       status: status,
-      message: message,
+      message: message['message'] || message['error'] || message,
     });
   }
 }
