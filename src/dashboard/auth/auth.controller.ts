@@ -1,11 +1,11 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
   HttpStatus,
   Logger,
   Post,
-  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -23,6 +23,7 @@ import { discordUserResponseDto } from './dto/discordUserResponse.dto';
 import { AuthGuard } from './auth.guard';
 
 import { APIError } from 'src/common/dto/APIError.dto';
+import { authCallbackRequestDto } from './dto/authCallbackRequest.dto';
 
 @ApiTags('Dashboard - Authentication API')
 @Controller('dashboard/auth')
@@ -45,13 +46,13 @@ export class AuthController {
     type: APIError,
   })
   async callback(
-    @Query('code') code: string,
+    @Body() body: authCallbackRequestDto,
   ): Promise<authCallbackResponseDto> {
     try {
       return {
         code: 'OPERATION_COMPLETE',
         status: HttpStatus['OK'],
-        data: await this.authService.callback(code),
+        data: await this.authService.callback(body.code),
       };
     } catch (e) {
       throw new HttpException(

@@ -34,7 +34,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       try {
         let content =
           '<@&1020555721005334570>\n\n:warning: **[오류 로그]** \n\n';
-        content += `\`\`\`오류 내용: ${JSON.stringify(message)}\`\`\`\n`;
+        content += `\`\`\`오류 내용: ${
+          message['message'] || message['error'] || JSON.stringify(message)
+        }\`\`\`\n`;
         content += `오류 페이지: ${request.url}\n`;
 
         axios.post(process.env.DISCORD_WEBHOOK_URL, {
