@@ -6,11 +6,13 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import APIError, { APIErrorCodes } from './common/dto/APIError.dto';
+import APIError from './common/dto/APIError.dto';
+import APIException from './common/dto/APIException.dto';
 
 import axios from 'axios';
 import { Request, Response } from 'express';
 
+// HttpException, APIException ...
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
@@ -18,25 +20,30 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    let status: HttpStatus = HttpStatus['INTERNAL_SERVER_ERROR'];
-    let message: string | object = '내부 서버 오류가 발생했습니다.';
+    let status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+    let message: string | object | APIError = '내부 서버 오류가 발생했습니다.';
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       message = exception.getResponse();
+    } else if (exception instanceof APIException) {
+      status = exception.status;
+      message = exception.APIError;
     }
 
+    // TODO - Discord Logging 작업은 함수로 따로 빼기
     if (
-      status === HttpStatus['BAD_REQUEST'] || // HTTP 400, 5xx 에 대해서만 로그를 보낸다.
-      status.toString().startsWith('5')
+      status === HttpStatus.BAD_REQUEST ||
+      HttpStatus[status].startsWith('5')
     ) {
       try {
-        let content =
-          '<@&1020555721005334570>\n\n:warning: **[오류 로그]** \n\n';
+        let content = `<@&1020555721005334570>\n\n:warning: **[오류 로그 - ${HttpStatus[status]}]** \n\n`;
         content += `\`\`\`오류 내용: ${
           message['message'] || message['error'] || JSON.stringify(message)
         }\`\`\`\n`;
         content += `오류 페이지: ${request.url}\n`;
+
+        // TODO - message가 APIError 종류일 경우 error 값이 없기에 처리 필요
 
         axios.post(process.env.DISCORD_WEBHOOK_URL, {
           content: content,
@@ -45,12 +52,17 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
 
     if (message instanceof APIError) {
-      response.status(status).json(message);
+      response.status(status).json({
+        code: HttpStatus[message.status],
+        status: message.status,
+        message: message.message,
+        data: message.data,
+      });
       return;
     }
 
     response.status(status).json({
-      code: APIErrorCodes[String(status)],
+      code: HttpStatus[status],
       status: status,
       message: message['message'] || message['error'] || message,
     });
