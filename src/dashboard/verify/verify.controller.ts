@@ -24,7 +24,7 @@ import { verifyConfigUpdateResponseDto } from './dto/verifyConfigUpdateResponse.
 
 import { AuthGuard } from 'src/dashboard/auth/auth.guard';
 import { AuthService } from 'src/dashboard/auth/auth.service';
-import { APIError, APIErrorCodes } from 'src/common/dto/APIError.dto';
+import { APIError } from 'src/common/dto/APIError.dto';
 
 @ApiTags('Dashboard - Server API')
 @ApiBearerAuth()
@@ -62,22 +62,17 @@ export class VerifyController {
 
       if (hasPermission) {
         if (!id) {
-          throw new APIError(
-            APIErrorCodes['400'],
-            HttpStatus['BAD_REQUEST'],
-            '서버 ID를 입력해주세요.',
-          );
+          throw new APIError(HttpStatus.BAD_REQUEST, '서버 ID를 입력해주세요.');
         }
 
         return {
           code: 'OPERATION_COMPLETE',
-          status: HttpStatus['OK'],
+          status: HttpStatus.OK,
           data: await this.verifyService.getCurrentConfig(id),
         };
       } else {
         throw new APIError(
-          APIErrorCodes['403'],
-          HttpStatus['FORBIDDEN'],
+          HttpStatus.FORBIDDEN,
           '해당 서버에 접근할 권한이 없습니다.',
         );
       }
@@ -115,11 +110,7 @@ export class VerifyController {
 
       if (hasPermission) {
         if (!id) {
-          throw new APIError(
-            APIErrorCodes['400'],
-            HttpStatus['BAD_REQUEST'],
-            '서버 ID를 입력해주세요.',
-          );
+          throw new APIError(HttpStatus.BAD_REQUEST, '서버 ID를 입력해주세요.');
         }
 
         const isAlreadyUsingService =
@@ -135,14 +126,13 @@ export class VerifyController {
 
         return {
           code: 'OPERATION_COMPLETE',
-          status: HttpStatus['OK'],
+          status: HttpStatus.OK,
           message:
             "Successfully updated server's button-verify feature config.",
         };
       } else {
         throw new APIError(
-          APIErrorCodes['403'],
-          HttpStatus['FORBIDDEN'],
+          HttpStatus.FORBIDDEN,
           '해당 서버에 접근할 권한이 없습니다.',
         );
       }

@@ -9,7 +9,7 @@ import { catchError, firstValueFrom } from 'rxjs';
 import { type APIUser } from 'discord-api-types/v10';
 
 import { inviteConfigDto } from './dto/inviteConfig.dto';
-import { APIError, APIErrorCodes } from 'src/common/dto/APIError.dto';
+import { APIError } from 'src/common/dto/APIError.dto';
 
 import { ISettings } from 'src/repository/schemas/settings.schema';
 import { IEnterprise } from 'src/repository/schemas/enterprise.schema';
@@ -54,8 +54,7 @@ export class InviteService {
             );
 
             throw new APIError(
-              APIErrorCodes[String(err.response.status || 500)],
-              err.response.status || HttpStatus['INTERNAL_SERVER_ERROR'],
+              err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
               (err.response.data as any)?.message ||
                 '내부 서버 오류가 발생했습니다.',
             );
@@ -109,19 +108,11 @@ export class InviteService {
       .equals(link);
 
     if (isLinkAlreadyUsing && isLinkAlreadyUsing.guild !== id) {
-      throw new APIError(
-        APIErrorCodes['409'],
-        HttpStatus['CONFLICT'],
-        '이미 사용중인 링크입니다.',
-      );
+      throw new APIError(HttpStatus.CONFLICT, '이미 사용중인 링크입니다.');
     }
 
     if (settings === 0 || settings === 1) {
-      throw new APIError(
-        APIErrorCodes['400'],
-        HttpStatus['BAD_REQUEST'],
-        '잘못된 설정입니다.',
-      );
+      throw new APIError(HttpStatus.BAD_REQUEST, '잘못된 설정입니다.');
     }
 
     await this.settingsModel.create({
@@ -150,19 +141,11 @@ export class InviteService {
       .equals(link);
 
     if (isLinkAlreadyUsing && isLinkAlreadyUsing.guild !== id) {
-      throw new APIError(
-        APIErrorCodes['409'],
-        HttpStatus['CONFLICT'],
-        '이미 사용중인 링크입니다.',
-      );
+      throw new APIError(HttpStatus.CONFLICT, '이미 사용중인 링크입니다.');
     }
 
     if (settings === 0 || settings === 1) {
-      throw new APIError(
-        APIErrorCodes['400'],
-        HttpStatus['BAD_REQUEST'],
-        '잘못된 설정입니다.',
-      );
+      throw new APIError(HttpStatus.BAD_REQUEST, '잘못된 설정입니다.');
     }
 
     await this.settingsModel.updateOne(
