@@ -51,7 +51,7 @@ export class AuthController {
     try {
       return {
         code: 'OPERATION_COMPLETE',
-        status: HttpStatus['OK'],
+        status: HttpStatus.OK,
         data: await this.authService.callback(body.code),
       };
     } catch (e) {
@@ -76,7 +76,7 @@ export class AuthController {
   getProfile(@Request() req): discordUserResponseDto {
     return {
       code: 'OPERATION_COMPLETE',
-      status: HttpStatus['OK'],
+      status: HttpStatus.OK,
       data: req.user,
     };
   }

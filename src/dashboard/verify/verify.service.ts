@@ -12,7 +12,7 @@ import { catchError, firstValueFrom } from 'rxjs';
 import { type RESTError, type APIGuild } from 'discord-api-types/v10';
 
 import { verifyConfigDto } from './dto/verifyConfig.dto';
-import { APIError, APIErrorCodes } from 'src/common/dto/APIError.dto';
+import { APIError } from 'src/common/dto/APIError.dto';
 
 import { IVerify } from 'src/repository/schemas/verify.schema';
 
@@ -57,16 +57,14 @@ export class VerifyService {
 
               if (err.response?.status === 429) {
                 throw new APIError(
-                  APIErrorCodes['429'],
-                  HttpStatus['TOO_MANY_REQUESTS'],
+                  HttpStatus.TOO_MANY_REQUESTS,
                   'Discord API 요청이 지연되고 있습니다. 잠시 후 다시 시도해주세요.',
                   err.response?.data,
                 );
               }
 
               throw new APIError(
-                APIErrorCodes[String(err.response.status || 500)],
-                err.response.status || HttpStatus['INTERNAL_SERVER_ERROR'],
+                err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
                 (err.response.data as RESTError)?.message ||
                   '내부 서버 오류가 발생했습니다.',
               );

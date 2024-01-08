@@ -2,7 +2,6 @@ import { HttpService } from '@nestjs/axios';
 import {
   CanActivate,
   ExecutionContext,
-  HttpException,
   HttpStatus,
   Inject,
   Injectable,
@@ -17,7 +16,7 @@ import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 
 import { type APIUser } from 'discord-api-types/v10';
-import { APIError, APIErrorCodes } from 'src/common/dto/APIError.dto';
+import APIException from 'src/common/dto/APIException.dto';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -32,14 +31,7 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
-      throw new HttpException(
-        new APIError(
-          APIErrorCodes['401'],
-          HttpStatus['UNAUTHORIZED'],
-          '로그인이 필요합니다.',
-        ),
-        HttpStatus['UNAUTHORIZED'],
-      );
+      throw new APIException(HttpStatus.UNAUTHORIZED, '로그인이 필요합니다.');
     }
 
     try {
@@ -76,24 +68,16 @@ export class AuthGuard implements CanActivate {
       request['user'] = data;
     } catch (e) {
       if (e instanceof AxiosError && e.response?.status === 429) {
-        throw new HttpException(
-          new APIError(
-            APIErrorCodes['429'],
-            HttpStatus['TOO_MANY_REQUESTS'],
-            'Discord API 요청이 지연되고 있습니다. 잠시 후 다시 시도해주세요.',
-            e.response?.data,
-          ),
-          HttpStatus['TOO_MANY_REQUESTS'],
+        throw new APIException(
+          HttpStatus.TOO_MANY_REQUESTS,
+          'Discord API 요청이 지연되고 있습니다. 잠시 후 다시 시도해주세요.',
+          e.response?.data,
         );
       }
 
-      throw new HttpException(
-        new APIError(
-          APIErrorCodes['401'],
-          HttpStatus['UNAUTHORIZED'],
-          '로그인 토큰이 만료되었거나 올바르지 않은 접근입니다.',
-        ),
-        HttpStatus['UNAUTHORIZED'],
+      throw new APIException(
+        HttpStatus.UNAUTHORIZED,
+        '로그인 토큰이 만료되었거나 올바르지 않은 접근입니다.',
       );
     }
 

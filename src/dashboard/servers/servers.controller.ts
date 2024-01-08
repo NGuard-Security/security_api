@@ -1,12 +1,12 @@
 import {
   Controller,
   Get,
-  HttpException,
   HttpStatus,
   Logger,
   Request,
   UseGuards,
   Query,
+  HttpException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -43,7 +43,7 @@ export class ServersController {
 
       return {
         code: 'OPERATION_COMPLETE',
-        status: HttpStatus['OK'],
+        status: HttpStatus.OK,
         data: await this.serversService.getServers(
           access_token,
           req.user.id,

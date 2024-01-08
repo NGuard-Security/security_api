@@ -9,7 +9,7 @@ import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 
 import { type RESTError, type APIGuildMember } from 'discord-api-types/v10';
-import { APIError, APIErrorCodes } from 'src/common/dto/APIError.dto';
+import { APIError } from 'src/common/dto/APIError.dto';
 
 import { summaryDataDto } from './dto/summaryData.dto';
 
@@ -61,8 +61,7 @@ export class SummaryService {
               );
 
               throw new APIError(
-                APIErrorCodes[String(err.response.status || 500)],
-                err.response.status || HttpStatus['INTERNAL_SERVER_ERROR'],
+                err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
                 (err.response.data as RESTError)?.message ||
                   '내부 서버 오류가 발생했습니다.',
               );
