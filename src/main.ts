@@ -1,12 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 
 import { AppModule } from './app.module';
 import { version } from '../package.json';
-import { GlobalExceptionFilter } from './global-exception.filter';
+import { GlobalExceptionFilter } from './common/filter/global-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter({ logger: true }),
+  );
 
   if (process.env.ENABLE_SWAGGER !== '0') {
     const config = new DocumentBuilder()
@@ -36,7 +43,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new GlobalExceptionFilter());
 
-  await app.listen(4000);
+  await app.listen(4000, '0.0.0.0');
 }
 
 bootstrap();

@@ -6,19 +6,19 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import APIError from './common/dto/APIError.dto';
-import APIException from './common/dto/APIException.dto';
+import APIError from '../dto/APIError.dto';
+import APIException from '../dto/APIException.dto';
 
 import axios from 'axios';
-import { Request, Response } from 'express';
+import { FastifyRequest, FastifyReply } from 'fastify';
 
 // HttpException, APIException ...
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
+    const response = ctx.getResponse<FastifyReply>();
+    const request = ctx.getRequest<FastifyRequest>();
 
     let status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     let message: string | object | APIError = '내부 서버 오류가 발생했습니다.';
@@ -52,7 +52,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
 
     if (message instanceof APIError) {
-      response.status(status).json({
+      response.status(status).send({
         code: HttpStatus[message.status],
         status: message.status,
         message: message.message,
@@ -61,7 +61,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       return;
     }
 
-    response.status(status).json({
+    response.status(status).send({
       code: HttpStatus[status],
       status: status,
       message: message['message'] || message['error'] || message,
