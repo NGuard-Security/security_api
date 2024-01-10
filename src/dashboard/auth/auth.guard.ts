@@ -10,7 +10,7 @@ import {
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 import { Cache } from 'cache-manager';
-import { Request } from 'express';
+import { FastifyRequest } from 'fastify';
 
 import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
@@ -84,7 +84,7 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
+  private extractTokenFromHeader(request: FastifyRequest): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     this.logger.debug(`Extracted Type => ${type}, Token => ${token}`);
     return type === 'Bearer' ? token : undefined;
