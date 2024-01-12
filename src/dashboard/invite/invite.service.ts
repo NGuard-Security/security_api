@@ -65,17 +65,27 @@ export class InviteService {
     // TODO: 커스텀 도메인 기능 추가
 
     if (payData) {
-      const premiumType = [0, 1].includes(payData.billingType)
-        ? 1
-        : [2, 3].includes(payData.billingType)
-          ? 2
-          : 0;
+      let premiumType: number = 0;
+      let period: number = -1;
 
-      const period = [0, 2].includes(payData.billingType)
-        ? 1
-        : [1, 4].includes(payData.billingType)
-          ? 3
-          : null;
+      switch (payData.billingType) {
+        case 0:
+          period = 1;
+          premiumType = 1;
+          break;
+        case 1:
+          period = 3;
+          premiumType = 1;
+          break;
+        case 2:
+          period = 1;
+          premiumType = 2;
+          break;
+        case 3:
+          premiumType = 2;
+          period = 3;
+          break;
+      }
 
       const expDate = new Date(payData.date);
       expDate.setDate(expDate.getDate() + period);
