@@ -65,10 +65,17 @@ export class InviteService {
     // TODO: 커스텀 도메인 기능 추가
 
     if (payData) {
-      const payType = [0, 1, 3].includes(payData.billingType)
-        ? 'PROFESSIONAL'
-        : 'ENTERPRISE';
-      const period = [0, 2, 4, 5].includes(payData.billingType) ? 1 : 3;
+      const premiumType = [0, 1].includes(payData.billingType)
+        ? 1
+        : [2, 3].includes(payData.billingType)
+          ? 2
+          : 0;
+
+      const period = [0, 2].includes(payData.billingType)
+        ? 1
+        : [1, 4].includes(payData.billingType)
+          ? 3
+          : null;
 
       const expDate = new Date(payData.date);
       expDate.setDate(expDate.getDate() + period);
@@ -77,10 +84,7 @@ export class InviteService {
         return {
           settings: settings,
           koreanbots: { voted: true, lastVote: 0 },
-          payData: {
-            type: payType,
-            expire: expDate.toISOString(),
-          },
+          premiumType: premiumType,
           domain: null,
         };
       }
@@ -89,7 +93,7 @@ export class InviteService {
     return {
       settings: settings,
       koreanbots: koreanbotsVoteData.data,
-      payData: null,
+      premiumType: 0,
       domain: null,
     };
   }

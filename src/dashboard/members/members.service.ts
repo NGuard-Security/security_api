@@ -10,7 +10,6 @@ import { catchError, firstValueFrom } from 'rxjs';
 
 import { type RESTError, type APIGuildMember } from 'discord-api-types/v10';
 
-import { discordUserDto } from './dto/discordUser.dto';
 import { APIError } from 'src/common/dto/APIError.dto';
 
 import { IBlacklist } from 'src/repository/schemas/blacklist.schema';
@@ -89,34 +88,34 @@ export class MembersService {
       .concat(gBlacklist)
       .map((user) => user.user);
 
-    users.forEach((user) => {
-      user.user['isBlackList'] = blacklist.includes(user.user.id);
-      user.user['nickName'] =
-        user.nick || user.user.global_name || user.user.username;
-      user.user['icon'] = user.user.avatar
-        ? `https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}.webp?size=128`
-        : `https://cdn.discordapp.com/embed/avatars/${Math.floor(
-            Math.random() * 6,
-          )}.png`;
-      user.user['userName'] =
-        user.user.discriminator !== '0'
-          ? `${user.user.username}#${user.user.discriminator}`
-          : user.user.username;
-
-      delete user.user.avatar;
-      delete user.user.avatar_decoration;
-      delete user.user.public_flags;
-      delete user.nick;
-      delete user.user.global_name;
-      delete user.user.username;
-      delete user.user.discriminator;
-    });
-
     return users
-      .map((user) => user.user)
-      .sort((a, b) =>
-        a['nickName'].localeCompare(b['nickName'], 'ko-KR'),
-      ) as discordUserDto[];
+      .map((user) => {
+        user.user['nickName'] =
+          user.nick || user.user.global_name || user.user.username;
+
+        user.user['icon'] = user.user.avatar
+          ? `https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}.webp?size=128`
+          : `https://cdn.discordapp.com/embed/avatars/${Math.floor(
+              Math.random() * 6,
+            )}.png`;
+
+        user.user['userName'] =
+          user.user.discriminator !== '0'
+            ? `${user.user.username}#${user.user.discriminator}`
+            : user.user.username;
+
+        user.user['isBlackList'] = blacklist.includes(user.user.id);
+
+        delete user.user.avatar;
+        delete user.user.public_flags;
+        delete user.nick;
+        delete user.user.global_name;
+        delete user.user.username;
+        delete user.user.discriminator;
+
+        return user.user;
+      })
+      .sort((a, b) => a['nickName'].localeCompare(b['nickName'], 'ko-KR'));
   }
 
   async updateBlacklist(guildId: string, userId: string): Promise<boolean> {
@@ -151,7 +150,7 @@ export class MembersService {
       await this.blacklistModel.create({
         guild: guildId,
         user: userId,
-        reason: '관리자 요청',
+        reason: 'NGuard Console을 통한 관리자 요청',
       });
 
       return true;

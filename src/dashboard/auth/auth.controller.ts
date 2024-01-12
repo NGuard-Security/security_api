@@ -1,16 +1,12 @@
 import {
   Body,
   Controller,
-  Get,
   HttpException,
   HttpStatus,
   Logger,
   Post,
-  Request,
-  UseGuards,
 } from '@nestjs/common';
 import {
-  ApiBearerAuth,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
@@ -19,8 +15,6 @@ import {
 
 import { AuthService } from './auth.service';
 import { authCallbackResponseDto } from './dto/authCallbackResponse.dto';
-import { discordUserResponseDto } from './dto/discordUserResponse.dto';
-import { AuthGuard } from './auth.guard';
 
 import { APIError } from 'src/common/dto/APIError.dto';
 import { authCallbackRequestDto } from './dto/authCallbackRequest.dto';
@@ -60,24 +54,5 @@ export class AuthController {
         HttpStatus[(e.code as string) || 'INTERNAL_SERVER_ERROR'],
       );
     }
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @Get('profile')
-  @ApiOperation({
-    summary: 'Discord Get User Profile',
-    description: 'Discord의 OAuth2 사용자 정보를 가져옵니다.',
-  })
-  @ApiOkResponse({
-    description: '로그인 사용자 정보',
-    type: discordUserResponseDto,
-  })
-  getProfile(@Request() req): discordUserResponseDto {
-    return {
-      code: 'OPERATION_COMPLETE',
-      status: HttpStatus.OK,
-      data: req.user,
-    };
   }
 }

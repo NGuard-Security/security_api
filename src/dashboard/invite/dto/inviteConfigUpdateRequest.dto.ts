@@ -10,7 +10,7 @@ export class inviteConfigUpdateRequestDto {
    * @example 2
    * @description 2: reCaptcha, 3: oAuth Verify, 4: Toss/SMS Verify
    */
-  settings: 0 | 2 | 3 | 4;
+  settings: 2 | 3 | 4;
 
   /**
    * 초대링크 링크 값

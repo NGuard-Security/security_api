@@ -10,7 +10,7 @@ export class verifyConfigUpdateRequestDto {
   /**
    * 인증 후 지급될 역할 값
    */
-  role: APIRole;
+  role: Pick<APIRole, 'id' | 'name'>;
 }
 
 export default verifyConfigUpdateRequestDto;

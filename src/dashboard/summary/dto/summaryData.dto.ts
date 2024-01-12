@@ -15,19 +15,19 @@ export class summaryDataDto {
    * 최근 새 멤버
    * @example 10
    */
-  new_user: number;
+  newUser: number;
 
   /**
    * 전체 블랙리스트 유저 수
    * @example 100
    */
-  black_user: number;
+  blackUser: number;
 
   /**
    * 초대링크 이용 유저 그래프
    * @example [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
    */
-  chart_data: number[];
+  chartData: number[];
 }
 
 export default summaryDataDto;

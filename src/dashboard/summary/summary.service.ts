@@ -136,9 +136,9 @@ export class SummaryService {
     return {
       bot: bots.length,
       user: users.length,
-      new_user: newUsers.length,
-      black_user: blacklist.length + globalBlacklist.length,
-      chart_data: graph,
+      newUser: newUsers.length,
+      blackUser: blacklist.length + globalBlacklist.length,
+      chartData: graph,
     };
   }
 }
