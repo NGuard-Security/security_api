@@ -51,8 +51,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       } catch (e) {} // that's fine
     }
 
+    // TODO: APIError 값을 따로 정의하지 말고 APIException이랑 합치기
     if (message instanceof APIError) {
-      response.status(status).send({
+      response.status(message.status).send({
         code: HttpStatus[message.status],
         status: message.status,
         message: message.message,

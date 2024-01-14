@@ -26,6 +26,7 @@ export class AuthService {
     private readonly httpService: HttpService,
   ) {}
 
+  // #region Discord OAuth2 Callback
   async callback(code: string): Promise<authCallbackDto> {
     const params = new URLSearchParams({
       client_id: process.env.DISCORD_CLIENT_ID,
@@ -43,6 +44,9 @@ export class AuthService {
           {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: `Basic ${Buffer.from(
+                `${process.env.DISCORD_CLIENT_ID}:${process.env.DISCORD_CLIENT_SECRET}`,
+              ).toString('base64')}`,
             },
           },
         )
@@ -60,7 +64,6 @@ export class AuthService {
               );
             }
 
-            // FIXME - 이거 그냥 response 있는지 여부에 따라서...
             throw new APIError(
               err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
               (err.response.data as DiscordOauthAPIError)?.error_description ||
@@ -72,7 +75,56 @@ export class AuthService {
 
     return data;
   }
+  // #endregion
 
+  // #region Discord OAuth2 Revoke - 토큰 폐기 및 로그아웃 처리
+  async revoke(
+    token: string,
+    token_type_hint: string = 'access_token',
+  ): Promise<any> {
+    const params = new URLSearchParams({
+      token: token,
+      token_type_hint: token_type_hint,
+    });
+
+    await firstValueFrom(
+      this.httpService
+        .post<any>('https://discord.com/api/v10/oauth2/token/revoke', params, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: `Basic ${Buffer.from(
+              `${process.env.DISCORD_CLIENT_ID}:${process.env.DISCORD_CLIENT_SECRET}`,
+            ).toString('base64')}`,
+          },
+        })
+        .pipe(
+          catchError((err: AxiosError) => {
+            this.logger.error(
+              `Revoke Error => ${JSON.stringify(err.response.data)}`,
+            );
+
+            if (err.response?.status === 429) {
+              throw new APIError(
+                HttpStatus.TOO_MANY_REQUESTS,
+                'Discord API 요청이 지연되고 있습니다. 잠시 후 다시 시도해주세요.',
+                err.response?.data,
+              );
+            }
+
+            throw new APIError(
+              err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
+              (err.response.data as RESTError)?.message ||
+                '내부 서버 오류가 발생했습니다.',
+            );
+          }),
+        ),
+    );
+
+    return;
+  }
+  // #endregion
+
+  // #region hasPermission - 권한이 있는 사용자인지 확인
   async hasPermission(
     guildId: string,
     userId: string,
@@ -194,4 +246,5 @@ export class AuthService {
 
     return true;
   }
+  // #endregion
 }

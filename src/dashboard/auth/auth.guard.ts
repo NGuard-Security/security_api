@@ -27,6 +27,7 @@ export class AuthGuard implements CanActivate {
     private readonly httpService: HttpService,
   ) {}
 
+  // #region canActivate - 로그인 한 사용자인지 확인
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
@@ -83,6 +84,7 @@ export class AuthGuard implements CanActivate {
 
     return true;
   }
+  // #endregion
 
   private extractTokenFromHeader(request: FastifyRequest): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
