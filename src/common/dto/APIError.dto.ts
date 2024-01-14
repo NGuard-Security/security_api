@@ -9,7 +9,8 @@ export class APIError {
 
   /**
    * 에러 ENUM (ENUM Type)
-   * @example HttpStatus.INTERNAL_SERVER_ERROR
+   * @example 500
+   * @description HttpStatus.INTERNAL_SERVER_ERROR
    */
   public status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 

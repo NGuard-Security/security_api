@@ -6,17 +6,11 @@ import {
   Logger,
   Post,
 } from '@nestjs/common';
-import {
-  ApiInternalServerErrorResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { authCallbackResponseDto } from './dto/authCallbackResponse.dto';
 
-import { APIError } from 'src/common/dto/APIError.dto';
 import { authCallbackRequestDto } from './dto/authCallbackRequest.dto';
 import { APIResponseDto } from 'src/common/dto/APIResponse.dto';
 import { authRevokeRequestDto } from './dto/authRevokeRequest.dto';
@@ -37,10 +31,6 @@ export class AuthController {
   @ApiOkResponse({
     description: '로그인 토큰 정보',
     type: authCallbackResponseDto,
-  })
-  @ApiInternalServerErrorResponse({
-    description: '로그인 실패 (OAuth 인증 실패)',
-    type: APIError,
   })
   async callback(
     @Body() body: authCallbackRequestDto,
@@ -70,10 +60,6 @@ export class AuthController {
     description: '토큰 폐기 성공 시',
     type: APIResponseDto,
   })
-  @ApiInternalServerErrorResponse({
-    description: '토큰 폐기 실패 (OAuth 인증 실패)',
-    type: APIError,
-  })
   async revoke(@Body() body: authRevokeRequestDto): Promise<APIResponseDto> {
     try {
       await this.authService.revoke(body.token, body.token_type_hint);
@@ -81,6 +67,7 @@ export class AuthController {
       return {
         code: 'OPERATION_COMPLETE',
         status: HttpStatus.OK,
+        data: null,
       };
     } catch (e) {
       throw new HttpException(
