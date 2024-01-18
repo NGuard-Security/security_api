@@ -11,7 +11,13 @@ export class APIResponseDto {
    */
   status: number;
 
-  data?: any;
+  data?: object | string | any;
+
+  /**
+   * 요청 실행 당시 서버 시간 (ISO 8601)
+   * @example '2021-08-01T00:00:00.000Z'
+   */
+  responseAt: string;
 }
 
 export default APIResponseDto;

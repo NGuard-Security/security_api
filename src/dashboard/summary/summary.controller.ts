@@ -16,10 +16,13 @@ import {
 } from '@nestjs/swagger';
 
 import { SummaryService } from './summary.service';
-import { summaryDataResponseDto } from './dto/summaryDataResponse.dto';
 
 import { AuthGuard } from 'src/dashboard/auth/auth.guard';
 import { AuthService } from 'src/dashboard/auth/auth.service';
+
+import { summaryDataDto } from './dto/summaryData.dto';
+import { summaryDataResponseDto } from './dto/summaryDataResponse.dto';
+
 import { APIError } from 'src/common/dto/APIError.dto';
 
 @ApiTags('Dashboard - Server API')
@@ -46,7 +49,7 @@ export class SummaryController {
   async getSummary(
     @Request() req,
     @Query('id') id: string,
-  ): Promise<summaryDataResponseDto> {
+  ): Promise<summaryDataDto> {
     try {
       const access_token = req.headers['authorization'].split(' ')[1];
 
@@ -61,11 +64,7 @@ export class SummaryController {
           throw new APIError(HttpStatus.BAD_REQUEST, '서버 ID를 입력해주세요.');
         }
 
-        return {
-          code: 'OPERATION_COMPLETE',
-          status: HttpStatus.OK,
-          data: await this.summaryService.getSummary(id),
-        };
+        return await this.summaryService.getSummary(id);
       } else {
         throw new APIError(
           HttpStatus.FORBIDDEN,

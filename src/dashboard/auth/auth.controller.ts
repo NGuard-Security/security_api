@@ -9,11 +9,14 @@ import {
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
+
+import { authCallbackDto } from './dto/authCallback.dto';
 import { authCallbackResponseDto } from './dto/authCallbackResponse.dto';
 
 import { authCallbackRequestDto } from './dto/authCallbackRequest.dto';
-import { APIResponseDto } from 'src/common/dto/APIResponse.dto';
 import { authRevokeRequestDto } from './dto/authRevokeRequest.dto';
+
+import { APIResponseDto } from 'src/common/dto/APIResponse.dto';
 
 @ApiTags('Dashboard - Authentication API')
 @Controller('dashboard/auth')
@@ -34,13 +37,9 @@ export class AuthController {
   })
   async callback(
     @Body() body: authCallbackRequestDto,
-  ): Promise<authCallbackResponseDto> {
+  ): Promise<authCallbackDto> {
     try {
-      return {
-        code: 'OPERATION_COMPLETE',
-        status: HttpStatus.OK,
-        data: await this.authService.callback(body.code),
-      };
+      return await this.authService.callback(body.code);
     } catch (e) {
       throw new HttpException(
         e,
@@ -60,15 +59,9 @@ export class AuthController {
     description: '토큰 폐기 성공 시',
     type: APIResponseDto,
   })
-  async revoke(@Body() body: authRevokeRequestDto): Promise<APIResponseDto> {
+  async revoke(@Body() body: authRevokeRequestDto): Promise<void> {
     try {
-      await this.authService.revoke(body.token, body.token_type_hint);
-
-      return {
-        code: 'OPERATION_COMPLETE',
-        status: HttpStatus.OK,
-        data: null,
-      };
+      return await this.authService.revoke(body.token, body.token_type_hint);
     } catch (e) {
       throw new HttpException(
         e,

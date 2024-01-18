@@ -18,12 +18,15 @@ import {
 } from '@nestjs/swagger';
 
 import { MembersService } from './members.service';
-import { membersListResponseDto } from './dto/membersListResponse.dto';
-import { blacklistUpdateRequestDto } from './dto/blacklistUpdateRequest.dto';
-import { blacklistUpdateResponseDto } from './dto/blacklistUpdateResponse.dto';
 
 import { AuthGuard } from 'src/dashboard/auth/auth.guard';
 import { AuthService } from 'src/dashboard/auth/auth.service';
+
+import { discordUserDto } from './dto/discordUser.dto';
+import { membersListResponseDto } from './dto/membersListResponse.dto';
+
+import { blacklistUpdateRequestDto } from './dto/blacklistUpdateRequest.dto';
+
 import { APIError } from 'src/common/dto/APIError.dto';
 
 @ApiTags('Dashboard - Server API')
@@ -50,7 +53,7 @@ export class MembersController {
   async getSummary(
     @Request() req,
     @Query('id') id: string,
-  ): Promise<membersListResponseDto> {
+  ): Promise<discordUserDto[]> {
     try {
       const access_token = req.headers['authorization'].split(' ')[1];
 
@@ -65,11 +68,7 @@ export class MembersController {
           throw new APIError(HttpStatus.BAD_REQUEST, '서버 ID를 입력해주세요.');
         }
 
-        return {
-          code: 'OPERATION_COMPLETE',
-          status: HttpStatus.OK,
-          data: await this.membersService.getMembersList(id),
-        };
+        return await this.membersService.getMembersList(id);
       } else {
         throw new APIError(
           HttpStatus.FORBIDDEN,
@@ -90,15 +89,11 @@ export class MembersController {
     summary: 'Add/remove user to blacklist of server',
     description: '특정 사용자를 해당 서버에서 블랙리스트에 추가/삭제합니다.',
   })
-  @ApiOkResponse({
-    description: '블랙리스트 추가/삭제 결과',
-    type: blacklistUpdateResponseDto,
-  })
   async updateConfig(
     @Request() req,
     @Query('id') id: string,
     @Body() body: blacklistUpdateRequestDto,
-  ): Promise<blacklistUpdateResponseDto> {
+  ): Promise<string> {
     try {
       const access_token = req.headers['authorization'].split(' ')[1];
 
@@ -115,11 +110,7 @@ export class MembersController {
 
         await this.membersService.updateBlacklist(id, body.member);
 
-        return {
-          code: 'OPERATION_COMPLETE',
-          status: HttpStatus.OK,
-          message: "Successfully modified server's user blacklist.",
-        };
+        return "Successfully modified server's user blacklist.";
       } else {
         throw new APIError(
           HttpStatus.FORBIDDEN,

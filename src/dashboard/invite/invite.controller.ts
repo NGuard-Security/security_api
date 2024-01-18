@@ -18,12 +18,15 @@ import {
 } from '@nestjs/swagger';
 
 import { InviteService } from './invite.service';
-import { inviteConfigResponseDto } from './dto/inviteConfigResponse.dto';
-import { inviteConfigUpdateRequestDto } from './dto/inviteConfigUpdateRequest.dto';
-import { inviteConfigUpdateResponseDto } from './dto/inviteConfigUpdateResponse.dto';
 
 import { AuthGuard } from 'src/dashboard/auth/auth.guard';
 import { AuthService } from 'src/dashboard/auth/auth.service';
+
+import { inviteConfigDto } from './dto/inviteConfig.dto';
+import { inviteConfigResponseDto } from './dto/inviteConfigResponse.dto';
+
+import { inviteConfigUpdateRequestDto } from './dto/inviteConfigUpdateRequest.dto';
+
 import { APIError } from 'src/common/dto/APIError.dto';
 
 @ApiTags('Dashboard - Server API')
@@ -50,7 +53,7 @@ export class InviteController {
   async getCurrentConfig(
     @Request() req,
     @Query('id') id: string,
-  ): Promise<inviteConfigResponseDto> {
+  ): Promise<inviteConfigDto> {
     try {
       const access_token = req.headers['authorization'].split(' ')[1];
 
@@ -65,11 +68,7 @@ export class InviteController {
           throw new APIError(HttpStatus.BAD_REQUEST, '서버 ID를 입력해주세요.');
         }
 
-        return {
-          code: 'OPERATION_COMPLETE',
-          status: HttpStatus.OK,
-          data: await this.inviteService.getCurrentConfig(id, req.user),
-        };
+        return await this.inviteService.getCurrentConfig(id, req.user);
       } else {
         throw new APIError(
           HttpStatus.FORBIDDEN,
@@ -90,15 +89,11 @@ export class InviteController {
     summary: 'Create/Update/Delete secure invite feature configuration',
     description: '해당 서버의 보안 초대 기능 설정을 생성/변경/삭제합니다.',
   })
-  @ApiOkResponse({
-    description: '보안 초대 기능 설정 변경 결과',
-    type: inviteConfigUpdateResponseDto,
-  })
   async updateConfig(
     @Request() req,
     @Query('id') id: string,
     @Body() body: inviteConfigUpdateRequestDto,
-  ): Promise<inviteConfigUpdateResponseDto> {
+  ): Promise<string> {
     try {
       const access_token = req.headers['authorization'].split(' ')[1];
 
@@ -134,12 +129,7 @@ export class InviteController {
           );
         }
 
-        return {
-          code: 'OPERATION_COMPLETE',
-          status: HttpStatus.OK,
-          message:
-            "Successfully updated server's secure invite feature config.",
-        };
+        return "Successfully updated server's secure invite feature config.";
       } else {
         throw new APIError(
           HttpStatus.FORBIDDEN,

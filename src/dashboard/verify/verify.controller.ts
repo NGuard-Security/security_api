@@ -18,12 +18,16 @@ import {
 } from '@nestjs/swagger';
 
 import { VerifyService } from './verify.service';
-import { verifyConfigResponseDto } from './dto/verifyConfigResponse.dto';
-import { verifyConfigUpdateRequestDto } from './dto/verifyConfigUpdateRequest.dto';
-import { verifyConfigUpdateResponseDto } from './dto/verifyConfigUpdateResponse.dto';
 
 import { AuthGuard } from 'src/dashboard/auth/auth.guard';
 import { AuthService } from 'src/dashboard/auth/auth.service';
+
+import { verifyConfigDto } from './dto/verifyConfig.dto';
+import { verifyConfigResponseDto } from './dto/verifyConfigResponse.dto';
+
+import { verifyConfigUpdateRequestDto } from './dto/verifyConfigUpdateRequest.dto';
+import { verifyConfigUpdateResponseDto } from './dto/verifyConfigUpdateResponse.dto';
+
 import { APIError } from 'src/common/dto/APIError.dto';
 
 @ApiTags('Dashboard - Server API')
@@ -50,7 +54,7 @@ export class VerifyController {
   async getCurrentConfig(
     @Request() req,
     @Query('id') id: string,
-  ): Promise<verifyConfigResponseDto> {
+  ): Promise<verifyConfigDto> {
     try {
       const access_token = req.headers['authorization'].split(' ')[1];
 
@@ -65,11 +69,7 @@ export class VerifyController {
           throw new APIError(HttpStatus.BAD_REQUEST, '서버 ID를 입력해주세요.');
         }
 
-        return {
-          code: 'OPERATION_COMPLETE',
-          status: HttpStatus.OK,
-          data: await this.verifyService.getCurrentConfig(id),
-        };
+        return await this.verifyService.getCurrentConfig(id);
       } else {
         throw new APIError(
           HttpStatus.FORBIDDEN,
@@ -98,7 +98,7 @@ export class VerifyController {
     @Request() req,
     @Query('id') id: string,
     @Body() body: verifyConfigUpdateRequestDto,
-  ): Promise<verifyConfigUpdateResponseDto> {
+  ): Promise<string> {
     try {
       const access_token = req.headers['authorization'].split(' ')[1];
 
@@ -124,12 +124,7 @@ export class VerifyController {
           await this.verifyService.createConfig(id, body.role.id);
         }
 
-        return {
-          code: 'OPERATION_COMPLETE',
-          status: HttpStatus.OK,
-          message:
-            "Successfully updated server's button-verify feature config.",
-        };
+        return "Successfully updated server's button-verify feature config.";
       } else {
         throw new APIError(
           HttpStatus.FORBIDDEN,

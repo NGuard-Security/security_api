@@ -81,7 +81,7 @@ export class AuthService {
   async revoke(
     token: string,
     token_type_hint: string = 'access_token',
-  ): Promise<any> {
+  ): Promise<void> {
     const params = new URLSearchParams({
       token: token,
       token_type_hint: token_type_hint,
