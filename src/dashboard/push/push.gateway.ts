@@ -14,7 +14,7 @@ import { PushService } from './push.service';
 export class PushGateway {
   constructor(private readonly pushService: PushService) {}
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @SubscribeMessage('push:check')
   async handlePushCheck(
     @MessageBody() body: { guild: string; already: boolean },
@@ -24,7 +24,7 @@ export class PushGateway {
     client.emit('push:check', pushArray);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @SubscribeMessage('push:load')
   async handlePushLoad(
     @MessageBody() body: { guild: string },

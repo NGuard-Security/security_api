@@ -1,24 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { IPush } from 'src/repository/schemas/push.schema';
 
 @Injectable()
 export class PushService {
-  constructor() {} // private readonly alarmModel: Model<>, // @Inject()
+  constructor(@Inject() private readonly pushModel: Model<IPush>) {}
 
   async getPushArray(guildId: string, isAlready: boolean) {
-    // const guildPushArray = await this.alarmModel.find({
-    //   guild: guildId,
-    //   id: { $nin: isAlreadyOrFalse },
-    //   due: { $gt: new Date().getTime() },
-    // });
-    // const globalPushArray = await this.alarmModel.find({
-    //   guild: 'global',
-    //   id: { $nin: isAlreadyOrFalse },
-    //   due: { $gt: new Date().getTime() },
-    // });
-    if (isAlready) {
-    }
-    // const pushArray = [].concat(guildPushArray, globalPushArray);
-    const pushArray = [].concat();
+    const guildPushArray = await this.pushModel.find({
+      guild: guildId,
+      id: { $nin: isAlready },
+      due: { $gt: new Date().getTime() },
+    });
+    const globalPushArray = await this.pushModel.find({
+      guild: 'global',
+      id: { $nin: isAlready },
+      due: { $gt: new Date().getTime() },
+    });
+
+    const pushArray = [].concat(guildPushArray, globalPushArray);
 
     pushArray.sort((push) => {
       switch (push.kind) {
