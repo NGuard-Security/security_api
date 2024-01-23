@@ -3875,6 +3875,7 @@ __metadata:
     redis: "npm:^4.6.12"
     reflect-metadata: "npm:^0.1.13"
     rxjs: "npm:^7.8.1"
+    socket.io: "npm:^4.7.4"
     source-map-support: "npm:^0.5.21"
     ts-loader: "npm:^9.4.3"
     ts-node: "npm:^10.9.1"
@@ -4737,6 +4738,21 @@ __metadata:
     socket.io-adapter: "npm:~2.5.2"
     socket.io-parser: "npm:~4.2.4"
   checksum: 03f2d196975f531fb068e31fb001ff4662e8acd1a6a4ddd8bb0359411aea3309d9764c0d2759dabd8fc96cf9840b2c4cdc70a473fa0e8f2b762ab619550de8e1
+  languageName: node
+  linkType: hard
+
+"socket.io@npm:^4.7.4":
+  version: 4.7.4
+  resolution: "socket.io@npm:4.7.4"
+  dependencies:
+    accepts: "npm:~1.3.4"
+    base64id: "npm:~2.0.0"
+    cors: "npm:~2.8.5"
+    debug: "npm:~4.3.2"
+    engine.io: "npm:~6.5.2"
+    socket.io-adapter: "npm:~2.5.2"
+    socket.io-parser: "npm:~4.2.4"
+  checksum: d1c439381137898c7389891d6f57eb4fd3129e3eeb211d7e5014b427e0f69087976f8dee8edc084bde1fac12f1f6a9063452cd2adc5314fa0ae3e5ae5ed609a9
   languageName: node
   linkType: hard
 
