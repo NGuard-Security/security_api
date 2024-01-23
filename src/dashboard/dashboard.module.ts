@@ -19,6 +19,9 @@ import { InviteService } from './invite/invite.service';
 import { VerifyController } from './verify/verify.controller';
 import { VerifyService } from './verify/verify.service';
 
+import { PushService } from './push/push.service';
+import { PushGateway } from './push/push.gateway';
+
 import { RepositoryModule } from 'src/repository/repository.module';
 
 import { blacklistProviders } from 'src/repository/models/blacklist.providers';
@@ -44,6 +47,8 @@ import { verifyProviders } from 'src/repository/models/verify.providers';
     MembersService,
     InviteService,
     VerifyService,
+    PushService,
+    PushGateway,
     ...blacklistProviders,
     ...usersProviders,
     ...settingsProviders,
