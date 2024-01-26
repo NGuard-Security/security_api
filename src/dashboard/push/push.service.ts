@@ -2,38 +2,26 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { IPush } from 'src/repository/schemas/push.schema';
 
+const pushKindTempENUM = {
+  emerg: 0,
+  danger: 1,
+  warning: 2,
+  success: 3,
+  alert: 4,
+} as const;
+
 @Injectable()
 export class PushService {
-  constructor(@Inject() private readonly pushModel: Model<IPush>) {}
+  constructor(@Inject('PUSH_MODEL') private readonly pushModel: Model<IPush>) {}
 
-  async getPushArray(guildId: string, isAlready: boolean) {
-    const guildPushArray = await this.pushModel.find({
-      guild: guildId,
-      id: { $nin: isAlready },
-      due: { $gt: new Date().getTime() },
-    });
-    const globalPushArray = await this.pushModel.find({
-      guild: 'global',
-      id: { $nin: isAlready },
-      due: { $gt: new Date().getTime() },
+  async getPushArray(guildId: string, alreadyPushIdArray: number[]) {
+    const pushArray = await this.pushModel.find({
+      $or: [{ guild: guildId }, { guild: 'global' }],
+      due: { $gt: Date.now() },
+      id: { $nin: alreadyPushIdArray },
     });
 
-    const pushArray = [].concat(guildPushArray, globalPushArray);
-
-    pushArray.sort((push) => {
-      switch (push.kind) {
-        case 'emerg':
-          return 0;
-        case 'danger':
-          return 1;
-        case 'warning':
-          return 2;
-        case 'success':
-          return 3;
-        case 'alert':
-          return 4;
-      }
-    });
+    pushArray.sort((push) => pushKindTempENUM[push.kind] || 5);
 
     return pushArray;
   }

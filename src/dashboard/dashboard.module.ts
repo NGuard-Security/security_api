@@ -19,10 +19,8 @@ import { InviteService } from './invite/invite.service';
 import { VerifyController } from './verify/verify.controller';
 import { VerifyService } from './verify/verify.service';
 
-import { PushService } from './push/push.service';
-import { PushGateway } from './push/push.gateway';
-
 import { RepositoryModule } from 'src/repository/repository.module';
+import { PushModule } from './push/push.module';
 
 import { blacklistProviders } from 'src/repository/models/blacklist.providers';
 import { usersProviders } from 'src/repository/models/users.providers';
@@ -31,7 +29,7 @@ import { enterpriseProviders } from 'src/repository/models/enterprise.providers'
 import { verifyProviders } from 'src/repository/models/verify.providers';
 
 @Module({
-  imports: [HttpModule, RepositoryModule],
+  imports: [HttpModule, RepositoryModule, PushModule],
   controllers: [
     AuthController,
     SummaryController,
@@ -47,8 +45,6 @@ import { verifyProviders } from 'src/repository/models/verify.providers';
     MembersService,
     InviteService,
     VerifyService,
-    PushService,
-    PushGateway,
     ...blacklistProviders,
     ...usersProviders,
     ...settingsProviders,
