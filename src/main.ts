@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { RedocModule, RedocOptions } from '@jozefazz/nestjs-redoc';
 
 import { AppModule } from './app.module';
 import { version } from '../package.json';
@@ -25,7 +27,13 @@ async function bootstrap() {
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('docs', app, document);
+
+    const redocOptions: RedocOptions = {
+      title: 'NGuard Security API',
+    };
+
+    await SwaggerModule.setup('docs', app, document);
+    await RedocModule.setup('redoc', app, document, redocOptions);
   }
 
   if (process.env.GLOBAL_CORS === '1') {
