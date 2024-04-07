@@ -380,14 +380,13 @@ __metadata:
   linkType: hard
 
 "@nestjs/axios@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@nestjs/axios@npm:3.0.1"
+  version: 3.0.2
+  resolution: "@nestjs/axios@npm:3.0.2"
   peerDependencies:
     "@nestjs/common": ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
     axios: ^1.3.1
-    reflect-metadata: ^0.1.12
     rxjs: ^6.0.0 || ^7.0.0
-  checksum: 80c1ed859bab67000f81049ba97b9ba7b3d36e659f3432a80a4daebd1fffa11b1d4be44922b136263cdf9859faa751472be3a41aadb262f7e7afa7ef75f45327
+  checksum: 00866a630596ab6aad4f27dd91aceb600b9db605a5307d359f0898177b020a77764782d8b102a25ed227a0f2d5f0679c5b68967261aec71d445be3f3f028ec84
   languageName: node
   linkType: hard
 
