@@ -391,15 +391,14 @@ __metadata:
   linkType: hard
 
 "@nestjs/cache-manager@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "@nestjs/cache-manager@npm:2.2.0"
+  version: 2.2.2
+  resolution: "@nestjs/cache-manager@npm:2.2.2"
   peerDependencies:
     "@nestjs/common": ^9.0.0 || ^10.0.0
     "@nestjs/core": ^9.0.0 || ^10.0.0
     cache-manager: <=5
-    reflect-metadata: ^0.1.12
     rxjs: ^7.0.0
-  checksum: 66d02f4b8901c975b5a14669f8518441ca7ffee934e7caeb5040740540599775f94a322968c9cf6d1bd6c9e350565d7c65eb15e23e1c86858e6bc9b5cc533665
+  checksum: e4ddbd90f1bf97c9692b292c2c53cabddf937fd434b3f5c71fb44539bb12edae0bb8cc955d7151f20eb24f4b37ba32cf39df83d8c3eefab52d31b75569b3dcb9
   languageName: node
   linkType: hard
 
