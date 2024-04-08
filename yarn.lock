@@ -31,6 +31,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@angular-devkit/core@npm:17.1.2":
+  version: 17.1.2
+  resolution: "@angular-devkit/core@npm:17.1.2"
+  dependencies:
+    ajv: "npm:8.12.0"
+    ajv-formats: "npm:2.1.1"
+    jsonc-parser: "npm:3.2.0"
+    picomatch: "npm:3.0.1"
+    rxjs: "npm:7.8.1"
+    source-map: "npm:0.7.4"
+  peerDependencies:
+    chokidar: ^3.5.2
+  peerDependenciesMeta:
+    chokidar:
+      optional: true
+  checksum: c32bb3a32b158b007f894ae7c865fa6618456b154d0abaa3442be2c3acad2c5777eee602c0482f2ee8de96a793b6b6b116f3af73f5f638c76b197a6e7e71bb93
+  languageName: node
+  linkType: hard
+
 "@angular-devkit/schematics-cli@npm:17.0.9":
   version: 17.0.9
   resolution: "@angular-devkit/schematics-cli@npm:17.0.9"
@@ -57,6 +76,19 @@ __metadata:
     ora: "npm:5.4.1"
     rxjs: "npm:7.8.1"
   checksum: 9df2a2ec44321d5faa0c3d885fb67adb4679cf7ae963638156c9f4c4bcca5f664eee8606e204413dd866699338a7e9a0df90f7edddd63a4f04b435aabd53b489
+  languageName: node
+  linkType: hard
+
+"@angular-devkit/schematics@npm:17.1.2":
+  version: 17.1.2
+  resolution: "@angular-devkit/schematics@npm:17.1.2"
+  dependencies:
+    "@angular-devkit/core": "npm:17.1.2"
+    jsonc-parser: "npm:3.2.0"
+    magic-string: "npm:0.30.5"
+    ora: "npm:5.4.1"
+    rxjs: "npm:7.8.1"
+  checksum: 478a3801d49da73b2beee694fa240c5acb7cf2d0adbadf46796f146b7524b8e730501190eb3afa848baed66a0e86abe025108a159a86b3e0be40580533dce8ec
   languageName: node
   linkType: hard
 
@@ -549,17 +581,17 @@ __metadata:
   linkType: hard
 
 "@nestjs/schematics@npm:^10.0.0, @nestjs/schematics@npm:^10.0.1":
-  version: 10.1.0
-  resolution: "@nestjs/schematics@npm:10.1.0"
+  version: 10.1.1
+  resolution: "@nestjs/schematics@npm:10.1.1"
   dependencies:
-    "@angular-devkit/core": "npm:17.0.9"
-    "@angular-devkit/schematics": "npm:17.0.9"
+    "@angular-devkit/core": "npm:17.1.2"
+    "@angular-devkit/schematics": "npm:17.1.2"
     comment-json: "npm:4.2.3"
-    jsonc-parser: "npm:3.2.0"
+    jsonc-parser: "npm:3.2.1"
     pluralize: "npm:8.0.0"
   peerDependencies:
     typescript: ">=4.8.2"
-  checksum: 6e0ab28b9bd3f162d1ef879c179af73c2901c7c28d87e542ed2f75a43c38a06b03af32a463f13fdce49ccec291c5a3b1db5229506cd66ce1a3762aafa65869b9
+  checksum: 4488deae3f96dcc429d2b55478bfd782e0442c48a47f69f9b59862f054ffc792f1a9cfca7700fe049ab68a2e392a0aea1ef7b4d1e2c97ffb9efd83f6c8f8e349
   languageName: node
   linkType: hard
 
@@ -3196,6 +3228,13 @@ __metadata:
   version: 3.2.0
   resolution: "jsonc-parser@npm:3.2.0"
   checksum: bd68b902e5f9394f01da97921f49c5084b2dc03a0c5b4fdb2a429f8d6f292686c1bf87badaeb0a8148d024192a88f5ad2e57b2918ba43fe25cf15f3371db64d4
+  languageName: node
+  linkType: hard
+
+"jsonc-parser@npm:3.2.1":
+  version: 3.2.1
+  resolution: "jsonc-parser@npm:3.2.1"
+  checksum: fe2df6f39e21653781d52cae20c5b9e0ab62461918d97f9430b216cea9b6500efc1d8b42c6584cc0a7548b4c996055e9cdc39f09b9782fa6957af2f45306c530
   languageName: node
   linkType: hard
 
