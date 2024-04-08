@@ -370,6 +370,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@microsoft/tsdoc@npm:^0.14.2":
+  version: 0.14.2
+  resolution: "@microsoft/tsdoc@npm:0.14.2"
+  checksum: 00c3d4fc184e8e09e17aef57e4a990402bd9752607a5d50bd62a9e85bc4b8791c985a51e238affa6b9a2d23110f24d373becbfc84e1e6e9a84cf977822e3b00a
+  languageName: node
+  linkType: hard
+
 "@mongodb-js/saslprep@npm:^1.1.0":
   version: 1.1.3
   resolution: "@mongodb-js/saslprep@npm:1.1.3"
@@ -506,20 +513,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/mapped-types@npm:2.0.4":
-  version: 2.0.4
-  resolution: "@nestjs/mapped-types@npm:2.0.4"
+"@nestjs/mapped-types@npm:2.0.5":
+  version: 2.0.5
+  resolution: "@nestjs/mapped-types@npm:2.0.5"
   peerDependencies:
     "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
     class-transformer: ^0.4.0 || ^0.5.0
     class-validator: ^0.13.0 || ^0.14.0
-    reflect-metadata: ^0.1.12
+    reflect-metadata: ^0.1.12 || ^0.2.0
   peerDependenciesMeta:
     class-transformer:
       optional: true
     class-validator:
       optional: true
-  checksum: 936005f02d12b36acefd59d8c0f83ad81aadcce76bb8df1b74d13b96f3f87a2e6277dcb2a89e2fdcbfca583ed9931b38b8473ec00d679ad9ab3bef9ae90d08c3
+  checksum: f3c2c29b2225ca46c8bad32188993248ae1551772e130b8a540b0249f56613b3242177480d367425bb1e235461b968843f0c8064f527a82a9f68b480e7c86880
   languageName: node
   linkType: hard
 
@@ -564,21 +571,22 @@ __metadata:
   linkType: hard
 
 "@nestjs/swagger@npm:^7.1.17":
-  version: 7.1.17
-  resolution: "@nestjs/swagger@npm:7.1.17"
+  version: 7.3.1
+  resolution: "@nestjs/swagger@npm:7.3.1"
   dependencies:
-    "@nestjs/mapped-types": "npm:2.0.4"
+    "@microsoft/tsdoc": "npm:^0.14.2"
+    "@nestjs/mapped-types": "npm:2.0.5"
     js-yaml: "npm:4.1.0"
     lodash: "npm:4.17.21"
     path-to-regexp: "npm:3.2.0"
-    swagger-ui-dist: "npm:5.10.3"
+    swagger-ui-dist: "npm:5.11.2"
   peerDependencies:
-    "@fastify/static": ^6.0.0
+    "@fastify/static": ^6.0.0 || ^7.0.0
     "@nestjs/common": ^9.0.0 || ^10.0.0
     "@nestjs/core": ^9.0.0 || ^10.0.0
     class-transformer: "*"
     class-validator: "*"
-    reflect-metadata: ^0.1.12
+    reflect-metadata: ^0.1.12 || ^0.2.0
   peerDependenciesMeta:
     "@fastify/static":
       optional: true
@@ -586,7 +594,7 @@ __metadata:
       optional: true
     class-validator:
       optional: true
-  checksum: bd7fa141d415ba1ed2727b4e35540d8cc3b42dff60fdb8cdf6b11f5ca0861fbed399583185a9bbc689964a5f45c08bd8872a13fbac0440b1ef6d7149a17ee9c6
+  checksum: 1545da1f32eb4c59f0f201426f8d683bfa455435c0c38b688603e28a6549c573973fe8c6b1650a8fe6431e0691eeec6e3d4d1f91f53fadd99d38ed360b7d3e01
   languageName: node
   linkType: hard
 
@@ -4724,10 +4732,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swagger-ui-dist@npm:5.10.3":
-  version: 5.10.3
-  resolution: "swagger-ui-dist@npm:5.10.3"
-  checksum: 7fcfcffdaa07d08bd2de0d54d71ea9cd40a6fbd976fc0e9aeb9dc388aa60584ad5ea2bb21c281f559a18e2163fe6b3c269ba42249410cad3ec81255f3013fc7d
+"swagger-ui-dist@npm:5.11.2":
+  version: 5.11.2
+  resolution: "swagger-ui-dist@npm:5.11.2"
+  checksum: 5f88842dcd9876c0f5e26b1ed1bb4cdc54441c065783a63448258f996949a32c136dc579e9c57be8489020c7d1a40ef71dd7c0414bb3e01602bdae97225e524b
   languageName: node
   linkType: hard
 
