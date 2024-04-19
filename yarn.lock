@@ -443,8 +443,8 @@ __metadata:
   linkType: hard
 
 "@nestjs/common@npm:^10.3.0":
-  version: 10.3.0
-  resolution: "@nestjs/common@npm:10.3.0"
+  version: 10.3.8
+  resolution: "@nestjs/common@npm:10.3.8"
   dependencies:
     iterare: "npm:1.2.1"
     tslib: "npm:2.6.2"
@@ -452,14 +452,14 @@ __metadata:
   peerDependencies:
     class-transformer: "*"
     class-validator: "*"
-    reflect-metadata: ^0.1.12
+    reflect-metadata: ^0.1.12 || ^0.2.0
     rxjs: ^7.1.0
   peerDependenciesMeta:
     class-transformer:
       optional: true
     class-validator:
       optional: true
-  checksum: bedb3437e6517df423526409b5a70cc33c52b557d17bd74ca12ab09a37ad5ff4ecdece44db625e3d702e21d308bc49d5419afe1752181af6aafdee3a27c9d394
+  checksum: e13fcfc11d4d0fdf2bf8c7482e7b3d6da2218cfd7f1483973084e49fd5f0ab4e9b4f36ce573a8ec88c32bd04fc792ab8468b377ba1446901fec8f02f2baafa17
   languageName: node
   linkType: hard
 
