@@ -7,6 +7,7 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { AppController } from './app.controller';
 import { RepositoryModule } from './repository/repository.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { WwwModule } from './www/www.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
         }),
     RepositoryModule,
     DashboardModule,
+    WwwModule,
   ],
   controllers: [AppController],
 })

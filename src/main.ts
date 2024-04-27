@@ -33,6 +33,8 @@ async function bootstrap() {
   } else {
     app.enableCors({
       origin: [
+        'https://nguard.xyz',
+        'https://home-v2test.nguard.dev',
         'https://console.nguard.xyz',
         'https://console-v2test.nguard.dev',
         'https://checkout.nguard.xyz',
