@@ -1,11 +1,18 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiProperty,
+  ApiTags,
+} from '@nestjs/swagger';
 
 class rootAccessDto {
   /**
    * Default return
+   * @example hacking
    */
-  happy = 'hacking';
+  @ApiProperty({ example: 'hacking' })
+  happy: string = 'hacking';
 }
 
 @ApiTags('Common - Health Check API')
