@@ -10,7 +10,7 @@ import { catchError, firstValueFrom } from 'rxjs';
 
 import { type RESTError, type APIGuildMember } from 'discord-api-types/v10';
 
-import { APIError } from 'src/common/dto/APIError.dto';
+import { APIException } from 'src/common/dto/APIException.dto';
 
 import { IBlacklist } from 'src/repository/schemas/blacklist.schema';
 
@@ -56,7 +56,7 @@ export class MembersService {
                 `GetGuildMembers Error => ${JSON.stringify(err.response.data)}`,
               );
 
-              throw new APIError(
+              throw new APIException(
                 err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
                 (err.response.data as RESTError)?.message ||
                   '내부 서버 오류가 발생했습니다.',
@@ -127,7 +127,7 @@ export class MembersService {
       .equals(userId);
 
     if (gBlacklist) {
-      throw new APIError(
+      throw new APIException(
         HttpStatus.CONFLICT,
         '해당 유저는 글로벌 블랙리스트로 이미 등록되어 있습니다.',
       );

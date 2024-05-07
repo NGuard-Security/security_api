@@ -1,15 +1,12 @@
-import { HttpService } from '@nestjs/axios';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 
+import { Koreanbots } from 'koreanbots';
 import { Model } from 'mongoose';
-
-import { AxiosError } from 'axios';
-import { catchError, firstValueFrom } from 'rxjs';
 
 import { type APIUser } from 'discord-api-types/v10';
 
 import { inviteConfigDto } from './dto/inviteConfig.dto';
-import { APIError } from 'src/common/dto/APIError.dto';
+import { APIException } from 'src/common/dto/APIException.dto';
 
 import { ISettings } from 'src/repository/schemas/settings.schema';
 import { IEnterprise } from 'src/repository/schemas/enterprise.schema';
@@ -18,12 +15,18 @@ import { IEnterprise } from 'src/repository/schemas/enterprise.schema';
 export class InviteService {
   private readonly logger = new Logger(InviteService.name);
 
+  private readonly koreanbotsClient = new Koreanbots({
+    clientID: process.env.DISCORD_CLIENT_ID,
+    api: {
+      token: process.env.KOREANBOTS_TOKEN,
+    },
+  });
+
   constructor(
     @Inject('SETTINGS_MODEL')
     private readonly settingsModel: Model<ISettings>,
     @Inject('ENTERPRISE_MODEL')
     private readonly enterpriseModel: Model<IEnterprise>,
-    private readonly httpService: HttpService,
   ) {}
 
   async getCurrentConfig(id: string, user: APIUser): Promise<inviteConfigDto> {
@@ -37,29 +40,8 @@ export class InviteService {
       .where('guild')
       .equals(id);
 
-    const { data: koreanbotsVoteData } = await firstValueFrom(
-      this.httpService
-        .get(
-          `https://koreanbots.dev/api/v2/bots/${process.env.DISCORD_CLIENT_ID}/vote?userID=${user.id}`,
-          {
-            headers: {
-              Authorization: process.env.KOREANBOTS_TOKEN,
-            },
-          },
-        )
-        .pipe(
-          catchError((err: AxiosError) => {
-            this.logger.error(
-              `Koreanbots Error => ${JSON.stringify(err.response.data)}`,
-            );
-
-            throw new APIError(
-              err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
-              (err.response.data as any)?.message ||
-                '내부 서버 오류가 발생했습니다.',
-            );
-          }),
-        ),
+    const koreanbotsVoteData = await this.koreanbotsClient.mybot.checkVote(
+      user.id,
     );
 
     // TODO: 커스텀 도메인 기능 추가
@@ -102,7 +84,7 @@ export class InviteService {
 
     return {
       settings: settings,
-      koreanbots: koreanbotsVoteData.data,
+      koreanbots: koreanbotsVoteData,
       premiumType: 0,
       domain: null,
     };
@@ -122,11 +104,11 @@ export class InviteService {
       .equals(link);
 
     if (isLinkAlreadyUsing && isLinkAlreadyUsing.guild !== id) {
-      throw new APIError(HttpStatus.CONFLICT, '이미 사용중인 링크입니다.');
+      throw new APIException(HttpStatus.CONFLICT, '이미 사용중인 링크입니다.');
     }
 
     if (settings === 0 || settings === 1) {
-      throw new APIError(HttpStatus.BAD_REQUEST, '잘못된 설정입니다.');
+      throw new APIException(HttpStatus.BAD_REQUEST, '잘못된 설정입니다.');
     }
 
     await this.settingsModel.create({
@@ -155,11 +137,11 @@ export class InviteService {
       .equals(link);
 
     if (isLinkAlreadyUsing && isLinkAlreadyUsing.guild !== id) {
-      throw new APIError(HttpStatus.CONFLICT, '이미 사용중인 링크입니다.');
+      throw new APIException(HttpStatus.CONFLICT, '이미 사용중인 링크입니다.');
     }
 
     if (settings === 0 || settings === 1) {
-      throw new APIError(HttpStatus.BAD_REQUEST, '잘못된 설정입니다.');
+      throw new APIException(HttpStatus.BAD_REQUEST, '잘못된 설정입니다.');
     }
 
     await this.settingsModel.updateOne(

@@ -12,7 +12,7 @@ import {
   type RESTGetAPICurrentUserGuildsResult,
 } from 'discord-api-types/v10';
 
-import { APIError } from 'src/common/dto/APIError.dto';
+import { APIException } from 'src/common/dto/APIException.dto';
 
 @Injectable()
 export class ServersService {
@@ -61,14 +61,14 @@ export class ServersService {
               );
 
               if (err.response?.status === 429) {
-                throw new APIError(
+                throw new APIException(
                   HttpStatus.TOO_MANY_REQUESTS,
                   'Discord API 요청이 지연되고 있습니다. 잠시 후 다시 시도해주세요.',
                   err.response?.data,
                 );
               }
 
-              throw new APIError(
+              throw new APIException(
                 err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
                 (err.response.data as RESTError)?.message ||
                   '내부 서버 오류가 발생했습니다.',
@@ -127,14 +127,14 @@ export class ServersService {
                 );
 
                 if (err.response?.status === 429) {
-                  throw new APIError(
+                  throw new APIException(
                     HttpStatus.TOO_MANY_REQUESTS,
                     'Discord API 요청이 지연되고 있습니다. 잠시 후 다시 시도해주세요.',
                     err.response?.data,
                   );
                 }
 
-                throw new APIError(
+                throw new APIException(
                   err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
                   (err.response.data as RESTError)?.message ||
                     '내부 서버 오류가 발생했습니다.',

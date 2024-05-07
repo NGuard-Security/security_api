@@ -1,18 +1,25 @@
 import { HttpStatus } from '@nestjs/common';
-import APIError from './APIError.dto';
 
-export default class APIException {
+export class APIException {
   constructor(status: HttpStatus, message: string, data?: any) {
-    this.APIError = new APIError(status, message, data);
     this.status = status;
+    this.message = message;
+    this.data = data;
   }
 
   /**
    * 에러 ENUM (ENUM Type)
-   * @example 500
-   * @description HttpStatus.INTERNAL_SERVER_ERROR
+   * @example HttpStatus.INTERNAL_SERVER_ERROR
    */
   public status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
-  public APIError: APIError;
+  /**
+   * 에러 메시지
+   * @example '내부 서버 오류가 발생했습니다.'
+   */
+  public message: string = '내부 서버 오류가 발생했습니다.';
+
+  public data?: any;
 }
+
+export default APIException;

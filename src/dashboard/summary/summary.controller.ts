@@ -23,7 +23,7 @@ import { AuthService } from 'src/dashboard/auth/auth.service';
 import { summaryDataDto } from './dto/summaryData.dto';
 import { summaryDataResponseDto } from './dto/summaryDataResponse.dto';
 
-import { APIError } from 'src/common/dto/APIError.dto';
+import { APIException } from 'src/common/dto/APIException.dto';
 
 @ApiTags('Dashboard - Server API')
 @ApiBearerAuth()
@@ -61,12 +61,15 @@ export class SummaryController {
 
       if (hasPermission) {
         if (!id) {
-          throw new APIError(HttpStatus.BAD_REQUEST, '서버 ID를 입력해주세요.');
+          throw new APIException(
+            HttpStatus.BAD_REQUEST,
+            '서버 ID를 입력해주세요.',
+          );
         }
 
         return await this.summaryService.getSummary(id);
       } else {
-        throw new APIError(
+        throw new APIException(
           HttpStatus.FORBIDDEN,
           '해당 서버에 접근할 권한이 없습니다.',
         );

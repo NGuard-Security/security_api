@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { RepositoryModule } from './repository/repository.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { WwwModule } from './www/www.module';
+import { InviteModule } from './invite/invite.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { WwwModule } from './www/www.module';
     RepositoryModule,
     DashboardModule,
     WwwModule,
+    InviteModule,
   ],
   controllers: [AppController],
 })

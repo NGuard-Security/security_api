@@ -28,7 +28,7 @@ import { verifyConfigResponseDto } from './dto/verifyConfigResponse.dto';
 import { verifyConfigUpdateRequestDto } from './dto/verifyConfigUpdateRequest.dto';
 import { verifyConfigUpdateResponseDto } from './dto/verifyConfigUpdateResponse.dto';
 
-import { APIError } from 'src/common/dto/APIError.dto';
+import { APIException } from 'src/common/dto/APIException.dto';
 
 @ApiTags('Dashboard - Server API')
 @ApiBearerAuth()
@@ -66,12 +66,15 @@ export class VerifyController {
 
       if (hasPermission) {
         if (!id) {
-          throw new APIError(HttpStatus.BAD_REQUEST, '서버 ID를 입력해주세요.');
+          throw new APIException(
+            HttpStatus.BAD_REQUEST,
+            '서버 ID를 입력해주세요.',
+          );
         }
 
         return await this.verifyService.getCurrentConfig(id);
       } else {
-        throw new APIError(
+        throw new APIException(
           HttpStatus.FORBIDDEN,
           '해당 서버에 접근할 권한이 없습니다.',
         );
@@ -110,7 +113,10 @@ export class VerifyController {
 
       if (hasPermission) {
         if (!id) {
-          throw new APIError(HttpStatus.BAD_REQUEST, '서버 ID를 입력해주세요.');
+          throw new APIException(
+            HttpStatus.BAD_REQUEST,
+            '서버 ID를 입력해주세요.',
+          );
         }
 
         const isAlreadyUsingService =
@@ -126,7 +132,7 @@ export class VerifyController {
 
         return "Successfully updated server's button-verify feature config.";
       } else {
-        throw new APIError(
+        throw new APIException(
           HttpStatus.FORBIDDEN,
           '해당 서버에 접근할 권한이 없습니다.',
         );

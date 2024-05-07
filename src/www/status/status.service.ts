@@ -36,10 +36,7 @@ export class StatusService {
       if (locallyCachedKoreanbots) {
         koreanbots = locallyCachedKoreanbots;
       } else {
-        koreanbots = await this.koreanbotsClient.bots.fetch(
-          process.env.DISCORD_CLIENT_ID,
-        );
-
+        koreanbots = this.koreanbotsClient.mybot.bot;
         await this.cacheManager.set('koreanbots', koreanbots, 600000);
       }
     }

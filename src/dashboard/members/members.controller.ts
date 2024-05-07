@@ -27,7 +27,7 @@ import { membersListResponseDto } from './dto/membersListResponse.dto';
 
 import { blacklistUpdateRequestDto } from './dto/blacklistUpdateRequest.dto';
 
-import { APIError } from 'src/common/dto/APIError.dto';
+import { APIException } from 'src/common/dto/APIException.dto';
 
 @ApiTags('Dashboard - Server API')
 @ApiBearerAuth()
@@ -65,12 +65,15 @@ export class MembersController {
 
       if (hasPermission) {
         if (!id) {
-          throw new APIError(HttpStatus.BAD_REQUEST, '서버 ID를 입력해주세요.');
+          throw new APIException(
+            HttpStatus.BAD_REQUEST,
+            '서버 ID를 입력해주세요.',
+          );
         }
 
         return await this.membersService.getMembersList(id);
       } else {
-        throw new APIError(
+        throw new APIException(
           HttpStatus.FORBIDDEN,
           '해당 서버에 접근할 권한이 없습니다.',
         );
@@ -105,14 +108,17 @@ export class MembersController {
 
       if (hasPermission) {
         if (!id) {
-          throw new APIError(HttpStatus.BAD_REQUEST, '서버 ID를 입력해주세요.');
+          throw new APIException(
+            HttpStatus.BAD_REQUEST,
+            '서버 ID를 입력해주세요.',
+          );
         }
 
         await this.membersService.updateBlacklist(id, body.member);
 
         return "Successfully modified server's user blacklist.";
       } else {
-        throw new APIError(
+        throw new APIException(
           HttpStatus.FORBIDDEN,
           '해당 서버에 접근할 권한이 없습니다.',
         );
