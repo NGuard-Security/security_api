@@ -27,7 +27,7 @@ jobs:
 
       - id: dockertag
         name: Get Docker tag
-        uses: ASzc/change-string-case-action@v5
+        uses: ASzc/change-string-case-action@v6
         with:
           string: ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
 
