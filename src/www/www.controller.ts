@@ -1,16 +1,16 @@
 import { Controller, Get, Logger } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { StatusService } from './status.service';
+import { WwwService } from './www.service';
 
-@ApiTags('Main - Bot Status API')
-@Controller('www/status')
-export class StatusController {
-  private readonly logger = new Logger(StatusController.name);
+@ApiTags('Main - Rendering Data API')
+@Controller('www')
+export class WwwController {
+  private readonly logger = new Logger(WwwController.name);
 
-  constructor(private readonly statusService: StatusService) {}
+  constructor(private readonly wwwService: WwwService) {}
 
-  @Get()
+  @Get('status')
   @ApiOperation({
     summary: 'Bot Status',
     description:
@@ -20,6 +20,6 @@ export class StatusController {
     votes?: number;
     servers?: number;
   }> {
-    return await this.statusService.getStatus();
+    return await this.wwwService.getStatus();
   }
 }

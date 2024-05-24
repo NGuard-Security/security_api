@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 
-import { StatusController } from './status/status.controller';
-import { StatusService } from './status/status.service';
+import { WwwController } from './www.controller';
+import { WwwService } from './www.service';
 
 @Module({
   imports: [],
-  controllers: [StatusController],
-  providers: [StatusService],
+  controllers: [WwwController],
+  providers: [WwwService],
 })
 export class WwwModule {}

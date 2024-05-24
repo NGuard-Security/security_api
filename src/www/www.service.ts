@@ -5,8 +5,8 @@ import { Cache } from 'cache-manager';
 import { Bot, Koreanbots } from 'koreanbots';
 
 @Injectable()
-export class StatusService {
-  private readonly logger = new Logger(StatusService.name);
+export class WwwService {
+  private readonly logger = new Logger(WwwService.name);
 
   private readonly koreanbotsClient = new Koreanbots({
     clientID: process.env.DISCORD_CLIENT_ID,
