@@ -30,7 +30,7 @@
     "fastify": "^4.27.0",
     "koreanbots": "^3.2.1",
     "mongoose": "^8.4.0",
-    "reflect-metadata": "^0.1.14",
+    "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
