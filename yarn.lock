@@ -688,21 +688,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/schematics@npm:^10.1.1":
-  version: 10.1.1
-  resolution: "@nestjs/schematics@npm:10.1.1"
-  dependencies:
-    "@angular-devkit/core": "npm:17.1.2"
-    "@angular-devkit/schematics": "npm:17.1.2"
-    comment-json: "npm:4.2.3"
-    jsonc-parser: "npm:3.2.1"
-    pluralize: "npm:8.0.0"
-  peerDependencies:
-    typescript: ">=4.8.2"
-  checksum: 10/4488deae3f96dcc429d2b55478bfd782e0442c48a47f69f9b59862f054ffc792f1a9cfca7700fe049ab68a2e392a0aea1ef7b4d1e2c97ffb9efd83f6c8f8e349
-  languageName: node
-  linkType: hard
-
 "@nestjs/swagger@npm:^7.3.1":
   version: 7.3.1
   resolution: "@nestjs/swagger@npm:7.3.1"
@@ -1735,27 +1720,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cache-manager@npm:^5.4.0":
-  version: 5.5.1
-  resolution: "cache-manager@npm:5.5.1"
-  dependencies:
-    eventemitter3: "npm:^5.0.1"
-    lodash.clonedeep: "npm:^4.5.0"
-    lru-cache: "npm:^10.2.0"
-    promise-coalesce: "npm:^1.1.2"
-  checksum: 10/1d18b09c3730185225627b9f87e333fc4f93fa81a2a94aa065f7b060211582ff45c882ef1a79e1d6a031e4f57449d8e901bdc0981ea8a656ecfbbedbb1e7003f
-  languageName: node
-  linkType: hard
-
-"cache-manager@npm:^5.5.2":
-  version: 5.5.2
-  resolution: "cache-manager@npm:5.5.2"
+"cache-manager@npm:^5.4.0, cache-manager@npm:^5.5.2":
+  version: 5.5.3
+  resolution: "cache-manager@npm:5.5.3"
   dependencies:
     eventemitter3: "npm:^5.0.1"
     lodash.clonedeep: "npm:^4.5.0"
     lru-cache: "npm:^10.2.2"
     promise-coalesce: "npm:^1.1.2"
-  checksum: 10/291a3ce84c72663098118999cfc8dc9ef19283ba75bfbfae56f47ed29c9e7c373ba53d107dc7057de1dba147839381f277828103e2a10d3da1686546ee07bb2c
+  checksum: 10/fe9e60c763a81525cf6404e91524b4120afd56fa89ae1f34fc430cece790b2eb85537923c327a603a26d76dddb12757efb6dbe026bb55fc8e47efb0652c69b37
   languageName: node
   linkType: hard
 
@@ -3660,13 +3633,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonc-parser@npm:3.2.1":
-  version: 3.2.1
-  resolution: "jsonc-parser@npm:3.2.1"
-  checksum: 10/fe2df6f39e21653781d52cae20c5b9e0ab62461918d97f9430b216cea9b6500efc1d8b42c6584cc0a7548b4c996055e9cdc39f09b9782fa6957af2f45306c530
-  languageName: node
-  linkType: hard
-
 "jsonfile@npm:^6.0.1":
   version: 6.1.0
   resolution: "jsonfile@npm:6.1.0"
@@ -4256,7 +4222,6 @@ __metadata:
     "@nestjs/config": "npm:^3.2.2"
     "@nestjs/core": "npm:^10.3.8"
     "@nestjs/platform-fastify": "npm:^10.3.8"
-    "@nestjs/schematics": "npm:^10.1.1"
     "@nestjs/swagger": "npm:^7.3.1"
     "@types/node": "npm:^20.12.10"
     "@typescript-eslint/eslint-plugin": "npm:^7.8.0"
