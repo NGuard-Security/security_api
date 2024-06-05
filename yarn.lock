@@ -1709,14 +1709,14 @@ __metadata:
   linkType: hard
 
 "cache-manager@npm:^5.5.3":
-  version: 5.5.3
-  resolution: "cache-manager@npm:5.5.3"
+  version: 5.6.1
+  resolution: "cache-manager@npm:5.6.1"
   dependencies:
     eventemitter3: "npm:^5.0.1"
     lodash.clonedeep: "npm:^4.5.0"
     lru-cache: "npm:^10.2.2"
     promise-coalesce: "npm:^1.1.2"
-  checksum: 10/fe9e60c763a81525cf6404e91524b4120afd56fa89ae1f34fc430cece790b2eb85537923c327a603a26d76dddb12757efb6dbe026bb55fc8e47efb0652c69b37
+  checksum: 10/4e4feb17ecda9b9b36a9e65321ce6c0b354f33bb3b8bf5d1fcae98efb0976c4ffaab4c50f38b06f5e70440d16fd139da5814748aa693f5108f4881ae9943f478
   languageName: node
   linkType: hard
 
