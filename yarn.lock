@@ -429,15 +429,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/cache-manager@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "@nestjs/cache-manager@npm:2.3.0"
+"@nestjs/cache-manager@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@nestjs/cache-manager@npm:3.0.0"
   peerDependencies:
-    "@nestjs/common": ^9.0.0 || ^10.0.0
-    "@nestjs/core": ^9.0.0 || ^10.0.0
-    cache-manager: <=5
-    rxjs: ^7.0.0
-  checksum: 10/7326676ba6a913762e39a32a78b41e3105e360c306f76de6be89363073b447b69d64ade65e4d9a3fe0caffe9baddf4ee9c347c9c5325a1c4247a428be388ab24
+    "@nestjs/common": ^9.0.0 || ^10.0.0 || ^11.0.0
+    "@nestjs/core": ^9.0.0 || ^10.0.0 || ^11.0.0
+    cache-manager: ">=6"
+    rxjs: ^7.8.1
+  checksum: 10/af579503a728b49dd68be160b095b4e61886f38588863126ba05f5f13b7956e802f22edc99328aafe286d506696a805d5623520ff6954f0d6a29e5abf3d9ab52
   languageName: node
   linkType: hard
 
@@ -4044,7 +4044,7 @@ __metadata:
   dependencies:
     "@fastify/static": "npm:^7.0.4"
     "@nestjs/axios": "npm:^3.1.3"
-    "@nestjs/cache-manager": "npm:^2.3.0"
+    "@nestjs/cache-manager": "npm:^3.0.0"
     "@nestjs/cli": "npm:^10.4.9"
     "@nestjs/common": "npm:^10.4.15"
     "@nestjs/config": "npm:^3.3.0"
