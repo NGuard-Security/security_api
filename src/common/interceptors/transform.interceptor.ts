@@ -4,23 +4,24 @@ import {
   ExecutionContext,
   CallHandler,
   HttpStatus,
-} from '@nestjs/common';
+} from '@nestjs/common'
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import type { FastifyRequest, FastifyReply } from 'fastify';
+import type { FastifyRequest, FastifyReply } from 'fastify'
 
 @Injectable()
 export class TransformInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data) => {
-        const ctx = context.switchToHttp();
-        const response = ctx.getResponse<FastifyReply>();
-        const request = ctx.getRequest<FastifyRequest>();
+        const ctx = context.switchToHttp()
+        const response = ctx.getResponse<FastifyReply>()
+        const request = ctx.getRequest<FastifyRequest>()
 
-        if (request.url === '/') return data;
+        if (request.url === '/' || request.url === '/www/status/webhook')
+          return data
 
         return {
           code: response.statusCode.toString().startsWith('2')
@@ -31,8 +32,8 @@ export class TransformInterceptor implements NestInterceptor {
           data: data,
 
           responseAt: new Date().toISOString(),
-        };
+        }
       }),
-    );
+    )
   }
 }

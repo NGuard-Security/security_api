@@ -1,20 +1,23 @@
-import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestFactory } from '@nestjs/core'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
+import { NestjsRedoxModule } from 'nestjs-redox'
+
 import {
   FastifyAdapter,
   NestFastifyApplication,
-} from '@nestjs/platform-fastify';
+} from '@nestjs/platform-fastify'
 
-import { AppModule } from './app.module';
-import { version } from '../package.json';
-import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
-import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { AppModule } from './app.module'
+import { version } from '../package.json'
+
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter'
+import { TransformInterceptor } from './common/interceptors/transform.interceptor'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({ logger: true }),
-  );
+  )
 
   if (process.env.ENABLE_SWAGGER !== '0') {
     const config = new DocumentBuilder()
@@ -22,14 +25,18 @@ async function bootstrap() {
       .setDescription('NGuard Security 서비스를 위한 백엔드 RestAPI 입니다.')
       .setVersion(version)
       .addBearerAuth()
-      .build();
+      .build()
 
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('docs', app, document);
+    const document = SwaggerModule.createDocument(app, config)
+
+    SwaggerModule.setup('docs', app, document)
+    NestjsRedoxModule.setup('redoc', app, document, {
+      standalone: true,
+    })
   }
 
   if (process.env.GLOBAL_CORS === '1') {
-    app.enableCors();
+    app.enableCors()
   } else {
     app.enableCors({
       origin: [
@@ -41,13 +48,13 @@ async function bootstrap() {
         'https://checkout-v2test.nguard.dev',
       ],
       credentials: true,
-    });
+    })
   }
 
-  app.useGlobalFilters(new GlobalExceptionFilter());
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalFilters(new GlobalExceptionFilter())
+  app.useGlobalInterceptors(new TransformInterceptor())
 
-  await app.listen(4000, '0.0.0.0');
+  await app.listen(4000, '0.0.0.0')
 }
 
-bootstrap();
+bootstrap()

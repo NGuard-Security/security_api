@@ -1,5 +1,5 @@
-import { Connection } from 'mongoose';
-import { EnterpriseSchema } from '../schemas/enterprise.schema';
+import { Connection } from 'mongoose'
+import { EnterpriseSchema } from '../schemas/enterprise.schema'
 
 export const enterpriseProviders = [
   {
@@ -8,4 +8,4 @@ export const enterpriseProviders = [
       connection.model('PreEnterprise', EnterpriseSchema),
     inject: ['DATABASE_CONNECTION'],
   },
-];
+]

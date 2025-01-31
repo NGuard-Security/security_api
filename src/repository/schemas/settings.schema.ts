@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 export interface ISettings {
-  guild: string;
-  settings: number;
-  status: number;
-  link: string;
+  guild: string
+  settings: number
+  status: number
+  link: string
 }
 
 export const SettingsSchema = new mongoose.Schema<ISettings>({
@@ -25,4 +25,4 @@ export const SettingsSchema = new mongoose.Schema<ISettings>({
     type: String,
     required: true,
   },
-});
+})

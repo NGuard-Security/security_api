@@ -1,5 +1,5 @@
-import { Connection } from 'mongoose';
-import { VerifySchema } from '../schemas/verify.schema';
+import { Connection } from 'mongoose'
+import { VerifySchema } from '../schemas/verify.schema'
 
 export const verifyProviders = [
   {
@@ -8,4 +8,4 @@ export const verifyProviders = [
       connection.model('Verify', VerifySchema),
     inject: ['DATABASE_CONNECTION'],
   },
-];
+]

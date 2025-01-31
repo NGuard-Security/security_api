@@ -1,18 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
-import {
-  ApiOkResponse,
-  ApiOperation,
-  ApiProperty,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Controller, Get } from '@nestjs/common'
+import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger'
 
-class rootAccessDto {
+class RootAccessDto {
   /**
    * Default return
    * @example hacking
    */
   @ApiProperty({ example: 'hacking' })
-  happy: string = 'hacking';
+  happy: string = 'hacking'
 }
 
 @ApiTags('Common - Health Check API')
@@ -23,11 +18,7 @@ export class AppController {
     summary: 'Health Check',
     description: '서버 상태를 확인합니다.',
   })
-  @ApiOkResponse({
-    description: '서버가 정상적으로 작동 할 경우',
-    type: rootAccessDto,
-  })
-  rootAccess(): rootAccessDto {
-    return { happy: 'hacking' };
+  rootAccess(): RootAccessDto {
+    return { happy: 'hacking' }
   }
 }

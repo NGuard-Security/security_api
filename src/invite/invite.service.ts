@@ -1,24 +1,24 @@
-import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { HttpService } from '@nestjs/axios';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { HttpService } from '@nestjs/axios'
 
-import { AxiosError } from 'axios';
-import { catchError, firstValueFrom } from 'rxjs';
+import { AxiosError } from 'axios'
+import { catchError, firstValueFrom } from 'rxjs'
 
-import { type APIGuildPreview } from 'discord-api-types/v10';
+import { type APIGuildPreview } from 'discord-api-types/v10'
 
-import { Cache } from 'cache-manager';
-import { Model } from 'mongoose';
+import { Cache } from 'cache-manager'
+import { Model } from 'mongoose'
 
-import { guildDto } from './dto/guild.dto';
+import { GuildDto } from './dto/guild.dto'
 
-import { ISettings } from 'src/repository/schemas/settings.schema';
-import { APIException } from 'src/common/dto/APIException.dto';
-import { VerifyRequestDto } from './dto/verify.dto';
+import { ISettings } from 'src/repository/schemas/settings.schema'
+import { APIException } from 'src/common/dto/APIException.dto'
+import { VerifyRequestDto } from './dto/verify.dto'
 
 @Injectable()
 export class InviteService {
-  private readonly logger = new Logger(InviteService.name);
+  private readonly logger = new Logger(InviteService.name)
 
   constructor(
     @Inject('SETTINGS_MODEL')
@@ -27,23 +27,20 @@ export class InviteService {
     private readonly httpService: HttpService,
   ) {}
 
-  async getGuildByInviteId(id: string): Promise<guildDto> {
-    const cachedGuild = await this.cacheManager.get<guildDto>(`invite:${id}`);
+  async getGuildByInviteId(id: string): Promise<GuildDto> {
+    const cachedGuild = await this.cacheManager.get<GuildDto>(`invite:${id}`)
 
     if (cachedGuild) {
-      return cachedGuild;
+      return cachedGuild
     }
 
-    const settings = await this.settingsModel
-      .findOne()
-      .where('link')
-      .equals(id);
+    const settings = await this.settingsModel.findOne().where('link').equals(id)
 
     if (!settings) {
       throw new APIException(
         HttpStatus.NOT_FOUND,
         '존재하지 않는 초대링크입니다.',
-      );
+      )
     }
 
     const { data: guild } = await firstValueFrom(
@@ -60,18 +57,18 @@ export class InviteService {
           catchError((err: AxiosError) => {
             this.logger.error(
               `Discord GuildPreview Error => ${JSON.stringify(err.response.data)}`,
-            );
+            )
 
             throw new APIException(
               err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
               (err.response.data as any)?.message ||
                 '내부 서버 오류가 발생했습니다.',
-            );
+            )
           }),
         ),
-    );
+    )
 
-    const guildData: guildDto = {
+    const guildData: GuildDto = {
       id: guild.id,
       name: guild.name,
       icon: guild.icon,
@@ -84,30 +81,30 @@ export class InviteService {
         oauth: settings.settings === 3,
         verify: settings.settings === 4,
       },
-    };
+    }
 
-    await this.cacheManager.set(`invite:${id}`, guildData, 600000);
+    await this.cacheManager.set(`invite:${id}`, guildData, 60 * 60 * 24 * 3)
 
-    return guildData;
+    return guildData
   }
 
   async verifyCaptcha(
     req,
     body: VerifyRequestDto,
   ): Promise<{
-    success: true;
-    nextStep: 'OAUTH' | 'VERIFY' | 'JOIN';
+    success: true
+    nextStep: 'OAUTH' | 'VERIFY' | 'JOIN'
   }> {
     const settings = await this.settingsModel
       .findOne()
       .where('guild')
-      .equals(body.guild);
+      .equals(body.guild)
 
     if (!settings) {
       throw new APIException(
         HttpStatus.NOT_FOUND,
         '존재하지 않는 초대링크입니다.',
-      );
+      )
     }
 
     const { data: captcha } = await firstValueFrom(
@@ -124,22 +121,22 @@ export class InviteService {
           catchError((err: AxiosError) => {
             this.logger.error(
               `Cloudflare Turnstile Error => ${JSON.stringify(err.response.data)}`,
-            );
+            )
 
             throw new APIException(
               err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
               (err.response.data as any)?.message ||
                 '내부 서버 오류가 발생했습니다.',
-            );
+            )
           }),
         ),
-    );
+    )
 
     if (!captcha.success) {
       throw new APIException(
         HttpStatus.FORBIDDEN,
         '캡챠 인증값이 올바르지 않습니다.',
-      );
+      )
     }
 
     return {
@@ -150,7 +147,7 @@ export class InviteService {
           : settings.settings === 4
             ? 'VERIFY'
             : 'JOIN',
-    };
+    }
   }
 
   async googleOAuthCallback(code: string) {
@@ -175,7 +172,7 @@ export class InviteService {
           catchError((err: AxiosError) => {
             this.logger.error(
               `Google OAuth2 Callback Error => ${JSON.stringify(err.response.data)}`,
-            );
+            )
 
             throw new APIException(
               err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
@@ -183,27 +180,27 @@ export class InviteService {
                 ? '만료된 인증 요청입니다. 다시 인증해 주세요.'
                 : (err.response.data as any)?.error_description ||
                   '내부 서버 오류가 발생했습니다.',
-            );
+            )
           }),
         ),
-    );
+    )
 
     if (callback.error || callback.error_description) {
       this.logger.error(
         `Google OAuth2 Callback Error => ${JSON.stringify(callback)}`,
-      );
+      )
 
       throw new APIException(
         HttpStatus.BAD_REQUEST,
         callback.error_description || '잘못된 요청입니다.',
-      );
+      )
     }
 
     const responseData = {
       access_token: callback.access_token as string,
       expires_in: callback.expires_in as number,
       token_type: (callback.token_type as string) || 'bearer',
-    };
+    }
 
     return `<script>
       opener.window.postMessage(${JSON.stringify({
@@ -212,7 +209,7 @@ export class InviteService {
           google: responseData,
         },
       })}, "*");
-    </script>`;
+    </script>`
   }
 
   async naverOAuthCallback(code: string, state: string) {
@@ -238,33 +235,33 @@ export class InviteService {
           catchError((err: AxiosError) => {
             this.logger.error(
               `Naver OAuth2 Callback Error => ${JSON.stringify(err.response.data)}`,
-            );
+            )
 
             throw new APIException(
               err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
               (err.response.data as any)?.message ||
                 '내부 서버 오류가 발생했습니다.',
-            );
+            )
           }),
         ),
-    );
+    )
 
     if (callback.error || callback.error_description) {
       this.logger.error(
         `Naver OAuth2 Callback Error => ${JSON.stringify(callback)}`,
-      );
+      )
 
       throw new APIException(
         HttpStatus.BAD_REQUEST,
         callback.error_description === 'no valid data in session'
           ? '만료된 인증 요청입니다. 다시 인증해 주세요.'
           : callback.error_description || '잘못된 요청입니다.',
-      );
+      )
     }
 
     return `<script>
       opener.window.postMessage(${JSON.stringify({ type: 'OAUTH_SIGNIN_COMPLETE', data: { naver: callback } })}, "*");
-    </script>`;
+    </script>`
   }
 
   async kakaoOAuthCallback(code: string) {
@@ -289,7 +286,7 @@ export class InviteService {
           catchError((err: AxiosError) => {
             this.logger.error(
               `Kakao OAuth2 Callback Error => ${JSON.stringify(err.response.data)}`,
-            );
+            )
 
             throw new APIException(
               err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
@@ -297,24 +294,24 @@ export class InviteService {
                 ? '만료된 인증 요청입니다. 다시 시도해 주세요.'
                 : (err.response.data as any)?.error_description ||
                   '내부 서버 오류가 발생했습니다.',
-            );
+            )
           }),
         ),
-    );
+    )
 
     if (callback.error || callback.error_description) {
       this.logger.error(
         `Kakao OAuth2 Callback Error => ${JSON.stringify(callback)}`,
-      );
+      )
 
       throw new APIException(
         HttpStatus.BAD_REQUEST,
         callback.error_description || '잘못된 요청입니다.',
-      );
+      )
     }
 
     return `<script>
       opener.window.postMessage(${JSON.stringify({ type: 'OAUTH_SIGNIN_COMPLETE', data: { kakao: callback } })}, "*");
-    </script>`;
+    </script>`
   }
 }

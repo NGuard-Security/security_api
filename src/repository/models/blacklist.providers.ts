@@ -1,5 +1,5 @@
-import { Connection } from 'mongoose';
-import { BlacklistSchema } from '../schemas/blacklist.schema';
+import { Connection } from 'mongoose'
+import { BlacklistSchema } from '../schemas/blacklist.schema'
 
 export const blacklistProviders = [
   {
@@ -8,4 +8,4 @@ export const blacklistProviders = [
       connection.model('Blacklist', BlacklistSchema),
     inject: ['DATABASE_CONNECTION'],
   },
-];
+]

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 export const databaseProviders = [
   {
@@ -6,4 +6,4 @@ export const databaseProviders = [
     useFactory: (): Promise<typeof mongoose> =>
       mongoose.connect(process.env.MONGODB_URI),
   },
-];
+]

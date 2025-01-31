@@ -8,20 +8,20 @@ import {
   Query,
   Req,
   Res,
-} from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { FastifyReply } from 'fastify';
+} from '@nestjs/common'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { FastifyReply } from 'fastify'
 
-import { InviteService } from './invite.service';
-import { generateRandomCode } from 'src/common/utils/generateRandomCode';
+import { InviteService } from './invite.service'
+import { generateRandomCode } from 'src/common/utils/generateRandomCode'
 
-import { guildDto } from './dto/guild.dto';
-import { VerifyRequestDto } from './dto/verify.dto';
+import { GuildDto } from './dto/guild.dto'
+import { VerifyRequestDto } from './dto/verify.dto'
 
 @ApiTags('Invite API')
 @Controller('invite')
 export class InviteController {
-  private readonly logger = new Logger(InviteController.name);
+  private readonly logger = new Logger(InviteController.name)
 
   constructor(private readonly inviteService: InviteService) {}
 
@@ -30,8 +30,8 @@ export class InviteController {
     summary: 'Get Invite guild info',
     description: '초대링크 ID를 통해 해당 서버의 정보를 가져옵니다.',
   })
-  async getGuildByInviteId(@Param('id') id: string): Promise<guildDto> {
-    return await this.inviteService.getGuildByInviteId(id);
+  async getGuildByInviteId(@Param('id') id: string): Promise<GuildDto> {
+    return await this.inviteService.getGuildByInviteId(id)
   }
 
   @Post('actions/captcha')
@@ -43,10 +43,10 @@ export class InviteController {
     @Req() req,
     @Body() body: VerifyRequestDto,
   ): Promise<{
-    success: true;
-    nextStep: 'OAUTH' | 'VERIFY' | 'JOIN';
+    success: true
+    nextStep: 'OAUTH' | 'VERIFY' | 'JOIN'
   }> {
-    return await this.inviteService.verifyCaptcha(req, body);
+    return await this.inviteService.verifyCaptcha(req, body)
   }
 
   @Get('actions/oauth/google')
@@ -59,7 +59,7 @@ export class InviteController {
       .status(302)
       .redirect(
         `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.INVITE_AUTH_ENDPOINT}/google-callback&response_type=code&scope=email profile&state=${generateRandomCode()}`,
-      );
+      )
   }
 
   @Get('actions/oauth/naver')
@@ -72,7 +72,7 @@ export class InviteController {
       .status(302)
       .redirect(
         `https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.INVITE_AUTH_ENDPOINT}/naver-callback&response_type=code&state=${generateRandomCode()}`,
-      );
+      )
   }
 
   @Get('actions/oauth/kakao')
@@ -85,7 +85,7 @@ export class InviteController {
       .status(302)
       .redirect(
         `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.INVITE_AUTH_ENDPOINT}/kakao-callback&response_type=code&state=${generateRandomCode()}`,
-      );
+      )
   }
 
   @Get('actions/oauth/google-callback')
@@ -98,12 +98,12 @@ export class InviteController {
     @Res() res: FastifyReply,
   ) {
     try {
-      const result = await this.inviteService.googleOAuthCallback(code);
+      const result = await this.inviteService.googleOAuthCallback(code)
 
-      res.header('Content-Type', 'text/html');
-      return res.send(result);
+      res.header('Content-Type', 'text/html')
+      return res.send(result)
     } catch (e) {
-      throw e;
+      throw e
     }
   }
 
@@ -118,12 +118,12 @@ export class InviteController {
     @Res() res: FastifyReply,
   ) {
     try {
-      const result = await this.inviteService.naverOAuthCallback(code, state);
+      const result = await this.inviteService.naverOAuthCallback(code, state)
 
-      res.header('Content-Type', 'text/html');
-      return res.send(result);
+      res.header('Content-Type', 'text/html')
+      return res.send(result)
     } catch (e) {
-      throw e;
+      throw e
     }
   }
 
@@ -137,12 +137,12 @@ export class InviteController {
     @Res() res: FastifyReply,
   ) {
     try {
-      const result = await this.inviteService.kakaoOAuthCallback(code);
+      const result = await this.inviteService.kakaoOAuthCallback(code)
 
-      res.header('Content-Type', 'text/html');
-      return res.send(result);
+      res.header('Content-Type', 'text/html')
+      return res.send(result)
     } catch (e) {
-      throw e;
+      throw e
     }
   }
 }

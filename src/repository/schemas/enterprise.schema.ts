@@ -1,13 +1,13 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 export interface IEnterprise {
-  billingType: number;
-  paymentId: string;
-  receiptUrl: string;
-  guild: string;
-  user: string;
-  transaction: any;
-  date: Date;
+  billingType: number
+  paymentId: string
+  receiptUrl: string
+  guild: string
+  user: string
+  transaction: any
+  date: Date
 }
 
 export const EnterpriseSchema = new mongoose.Schema<IEnterprise>({
@@ -43,4 +43,4 @@ export const EnterpriseSchema = new mongoose.Schema<IEnterprise>({
     required: true,
     default: Date.now,
   },
-});
+})

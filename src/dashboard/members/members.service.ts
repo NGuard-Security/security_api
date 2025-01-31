@@ -1,22 +1,22 @@
-import { HttpService } from '@nestjs/axios';
-import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { HttpService } from '@nestjs/axios'
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
 
-import { Cache } from 'cache-manager';
+import { Cache } from 'cache-manager'
 
-import { Model } from 'mongoose';
-import { AxiosError } from 'axios';
-import { catchError, firstValueFrom } from 'rxjs';
+import { Model } from 'mongoose'
+import { AxiosError } from 'axios'
+import { catchError, firstValueFrom } from 'rxjs'
 
-import { type RESTError, type APIGuildMember } from 'discord-api-types/v10';
+import { type RESTError, type APIGuildMember } from 'discord-api-types/v10'
 
-import { APIException } from 'src/common/dto/APIException.dto';
+import { APIException } from 'src/common/dto/APIException.dto'
 
-import { IBlacklist } from 'src/repository/schemas/blacklist.schema';
+import { IBlacklist } from 'src/repository/schemas/blacklist.schema'
 
 @Injectable()
 export class MembersService {
-  private readonly logger = new Logger(MembersService.name);
+  private readonly logger = new Logger(MembersService.name)
 
   constructor(
     @Inject(CACHE_MANAGER)
@@ -27,18 +27,16 @@ export class MembersService {
   ) {}
 
   async getMembersList(guildId: string): Promise<any> {
-    let membersList: APIGuildMember[];
+    let membersList: APIGuildMember[]
 
     const cachedMembersList = await this.cacheManager.get<APIGuildMember[]>(
       `members:${guildId}`,
-    );
+    )
 
     if (cachedMembersList) {
-      this.logger.debug(
-        `Cached Members List => ${JSON.stringify(membersList)}`,
-      );
+      this.logger.debug(`Cached Members List => ${JSON.stringify(membersList)}`)
 
-      membersList = cachedMembersList;
+      membersList = cachedMembersList
     } else {
       const { data } = await firstValueFrom(
         this.httpService
@@ -54,68 +52,68 @@ export class MembersService {
             catchError((err: AxiosError) => {
               this.logger.error(
                 `GetGuildMembers Error => ${JSON.stringify(err.response.data)}`,
-              );
+              )
 
               throw new APIException(
                 err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
                 (err.response.data as RESTError)?.message ||
                   '내부 서버 오류가 발생했습니다.',
-              );
+              )
             }),
           ),
-      );
+      )
 
-      await this.cacheManager.set(`members:${guildId}`, data, 15 * 60 * 1000);
+      await this.cacheManager.set(`members:${guildId}`, data, 15 * 60 * 1000)
 
-      this.logger.debug(`Members cache set => ${JSON.stringify(data)}`);
-      membersList = data;
+      this.logger.debug(`Members cache set => ${JSON.stringify(data)}`)
+      membersList = data
     }
 
-    const users = membersList.filter((user) => !user.user.bot);
+    const users = membersList.filter((user) => !user.user.bot)
 
     const sblacklist = await this.blacklistModel
       .find()
       .where('guild')
-      .equals(guildId);
+      .equals(guildId)
 
     const gBlacklist = await this.blacklistModel
       .find()
       .where('guild')
-      .equals('global');
+      .equals('global')
 
     const blacklist = []
       .concat(sblacklist)
       .concat(gBlacklist)
-      .map((user) => user.user);
+      .map((user) => user.user)
 
     return users
       .map((user) => {
         user.user['nickName'] =
-          user.nick || user.user.global_name || user.user.username;
+          user.nick || user.user.global_name || user.user.username
 
         user.user['icon'] = user.user.avatar
           ? `https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}.webp?size=128`
           : `https://cdn.discordapp.com/embed/avatars/${Math.floor(
               Math.random() * 6,
-            )}.png`;
+            )}.png`
 
         user.user['userName'] =
           user.user.discriminator !== '0'
             ? `${user.user.username}#${user.user.discriminator}`
-            : user.user.username;
+            : user.user.username
 
-        user.user['isBlackList'] = blacklist.includes(user.user.id);
+        user.user['isBlackList'] = blacklist.includes(user.user.id)
 
-        delete user.user.avatar;
-        delete user.user.public_flags;
-        delete user.nick;
-        delete user.user.global_name;
-        delete user.user.username;
-        delete user.user.discriminator;
+        delete user.user.avatar
+        delete user.user.public_flags
+        delete user.nick
+        delete user.user.global_name
+        delete user.user.username
+        delete user.user.discriminator
 
-        return user.user;
+        return user.user
       })
-      .sort((a, b) => a['nickName'].localeCompare(b['nickName'], 'ko-KR'));
+      .sort((a, b) => a['nickName'].localeCompare(b['nickName'], 'ko-KR'))
   }
 
   async updateBlacklist(guildId: string, userId: string): Promise<boolean> {
@@ -124,13 +122,13 @@ export class MembersService {
       .where('guild')
       .equals('global')
       .where('user')
-      .equals(userId);
+      .equals(userId)
 
     if (gBlacklist) {
       throw new APIException(
         HttpStatus.CONFLICT,
         '해당 유저는 글로벌 블랙리스트로 이미 등록되어 있습니다.',
-      );
+      )
     }
 
     const sblacklist = await this.blacklistModel
@@ -138,22 +136,22 @@ export class MembersService {
       .where('guild')
       .equals(guildId)
       .where('user')
-      .equals(userId);
+      .equals(userId)
 
     if (sblacklist) {
       await this.blacklistModel.deleteOne({
         guild: guildId,
         user: userId,
-      });
-      return false;
+      })
+      return false
     } else {
       await this.blacklistModel.create({
         guild: guildId,
         user: userId,
         reason: 'NGuard Console을 통한 관리자 요청',
-      });
+      })
 
-      return true;
+      return true
     }
   }
 }

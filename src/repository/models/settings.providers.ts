@@ -1,5 +1,5 @@
-import { Connection } from 'mongoose';
-import { SettingsSchema } from '../schemas/settings.schema';
+import { Connection } from 'mongoose'
+import { SettingsSchema } from '../schemas/settings.schema'
 
 export const settingsProviders = [
   {
@@ -8,4 +8,4 @@ export const settingsProviders = [
       connection.model('Settings', SettingsSchema),
     inject: ['DATABASE_CONNECTION'],
   },
-];
+]

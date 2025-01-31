@@ -1,12 +1,12 @@
-import { APIRole } from 'discord-api-types/v10';
+import { APIRole } from 'discord-api-types/v10'
 
-export class verifyConfigDto {
+export class VerifyConfigDto {
   settings?: {
-    role: APIRole;
-  };
+    role: APIRole
+  }
   guild: {
-    roles: APIRole[];
-  };
+    roles: APIRole[]
+  }
 }
 
-export default verifyConfigDto;
+export default VerifyConfigDto

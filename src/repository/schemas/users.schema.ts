@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 export interface IUsers {
-  userid: string;
-  servers: string;
-  oauth: string;
-  verify: string;
-  ip: string;
-  registeredAt: Date;
+  userid: string
+  servers: string
+  oauth: string
+  verify: string
+  ip: string
+  registeredAt: Date
 }
 
 export const UsersSchema = new mongoose.Schema<IUsers>({
@@ -29,4 +29,4 @@ export const UsersSchema = new mongoose.Schema<IUsers>({
     required: true,
     default: Date.now,
   },
-});
+})

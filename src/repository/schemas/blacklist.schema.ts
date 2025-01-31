@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 export interface IBlacklist {
-  guild: string;
-  user: string;
-  reason: string;
-  date: Date;
+  guild: string
+  user: string
+  reason: string
+  date: Date
 }
 
 export const BlacklistSchema = new mongoose.Schema<IBlacklist>({
@@ -25,4 +25,4 @@ export const BlacklistSchema = new mongoose.Schema<IBlacklist>({
     required: true,
     default: Date.now,
   },
-});
+})
