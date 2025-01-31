@@ -21,31 +21,40 @@ export class WwwService {
     votes?: number;
     servers?: number;
   }> {
-    let koreanbots: Bot;
-
-    const redisCachedKoreanbots =
-      await this.cacheManager.get<Bot>('koreanbots');
-
-    if (redisCachedKoreanbots) {
-      koreanbots = redisCachedKoreanbots;
-    } else {
-      const locallyCachedKoreanbots = this.koreanbotsClient.bots.cache.get(
-        process.env.DISCORD_CLIENT_ID,
-      );
-
-      if (locallyCachedKoreanbots) {
-        koreanbots = locallyCachedKoreanbots;
+    try {
+      let koreanbots: Bot;
+  
+      const redisCachedKoreanbots =
+        await this.cacheManager.get<Bot>('koreanbots');
+  
+      if (redisCachedKoreanbots) {
+        koreanbots = redisCachedKoreanbots;
       } else {
-        koreanbots = this.koreanbotsClient.mybot.bot;
-        await this.cacheManager.set('koreanbots', koreanbots, 600000);
+        const locallyCachedKoreanbots = this.koreanbotsClient.bots.cache.get(
+          process.env.DISCORD_CLIENT_ID,
+        );
+  
+        if (locallyCachedKoreanbots) {
+          koreanbots = locallyCachedKoreanbots;
+        } else {
+          koreanbots = this.koreanbotsClient.mybot.bot;
+          await this.cacheManager.set('koreanbots', koreanbots, 600000);
+        }
       }
+  
+      this.logger.debug(koreanbots);
+  
+      return {
+        servers: koreanbots.servers,
+        votes: koreanbots.votes,
+      };
+    } catch (e) {
+      this.logger.error(e);
+
+      return {
+        servers: null,
+        votes: null,
+      };
     }
-
-    this.logger.debug(koreanbots);
-
-    return {
-      servers: koreanbots.servers,
-      votes: koreanbots.votes,
-    };
   }
 }
