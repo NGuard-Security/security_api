@@ -1,6 +1,6 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 
-import { Koreanbots } from 'koreanbots';
+// import { Koreanbots } from 'koreanbots';
 import { Model } from 'mongoose';
 
 import { type APIUser } from 'discord-api-types/v10';
@@ -15,12 +15,12 @@ import { IEnterprise } from 'src/repository/schemas/enterprise.schema';
 export class InviteService {
   private readonly logger = new Logger(InviteService.name);
 
-  private readonly koreanbotsClient = new Koreanbots({
-    clientID: process.env.DISCORD_CLIENT_ID,
-    api: {
-      token: process.env.KOREANBOTS_TOKEN,
-    },
-  });
+  // private readonly koreanbotsClient = new Koreanbots({
+  //   clientID: process.env.DISCORD_CLIENT_ID,
+  //   api: {
+  //     token: process.env.KOREANBOTS_TOKEN,
+  //   },
+  // });
 
   constructor(
     @Inject('SETTINGS_MODEL')
@@ -40,9 +40,12 @@ export class InviteService {
       .where('guild')
       .equals(id);
 
-    const koreanbotsVoteData = await this.koreanbotsClient.mybot.checkVote(
-      user.id,
-    );
+    // 2025 01 31 - 한디리 오류로 임시 주석처리
+    // const koreanbotsVoteData = await this.koreanbotsClient.mybot.checkVote(
+    //   user.id,
+    // );
+
+    const koreanbotsVoteData = { voted: true, lastVote: 0 }
 
     // TODO: 커스텀 도메인 기능 추가
 
