@@ -86,7 +86,7 @@ export class InviteService {
       },
     };
 
-    await this.cacheManager.set(`invite:${id}`, guildData, 600000);
+    await this.cacheManager.set(`invite:${id}`, guildData, 60 * 60 * 24 * 3);
 
     return guildData;
   }

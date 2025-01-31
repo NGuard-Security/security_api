@@ -4,6 +4,7 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 
 import APIException from '../dto/APIException.dto';
@@ -14,7 +15,11 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 // HttpException, APIException ...
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(GlobalExceptionFilter.name);
+
   catch(exception: any, host: ArgumentsHost) {
+    this.logger.error(exception);
+
     const ctx = host.switchToHttp();
     const response: FastifyReply<any> = ctx.getResponse<FastifyReply>();
     const request: FastifyRequest<any> = ctx.getRequest<FastifyRequest>();
@@ -42,7 +47,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         axios.post(process.env.DISCORD_WEBHOOK_URL, {
           content: content,
         });
-      } catch (e) {} // that's fine
+      } catch {} // that's fine
     }
 
     if (exception instanceof APIException) {

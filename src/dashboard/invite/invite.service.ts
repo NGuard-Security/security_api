@@ -1,7 +1,9 @@
+// import { HttpService } from '@nestjs/axios';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
-
-// import { Koreanbots } from 'koreanbots';
 import { Model } from 'mongoose';
+
+// import { AxiosError } from 'axios';
+// import { catchError, firstValueFrom } from 'rxjs';
 
 import { type APIUser } from 'discord-api-types/v10';
 
@@ -15,20 +17,15 @@ import { IEnterprise } from 'src/repository/schemas/enterprise.schema';
 export class InviteService {
   private readonly logger = new Logger(InviteService.name);
 
-  // private readonly koreanbotsClient = new Koreanbots({
-  //   clientID: process.env.DISCORD_CLIENT_ID,
-  //   api: {
-  //     token: process.env.KOREANBOTS_TOKEN,
-  //   },
-  // });
-
   constructor(
     @Inject('SETTINGS_MODEL')
     private readonly settingsModel: Model<ISettings>,
     @Inject('ENTERPRISE_MODEL')
     private readonly enterpriseModel: Model<IEnterprise>,
+    // private readonly httpService: HttpService,
   ) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getCurrentConfig(id: string, user: APIUser): Promise<inviteConfigDto> {
     const settings = await this.settingsModel
       .findOne()
@@ -40,12 +37,46 @@ export class InviteService {
       .where('guild')
       .equals(id);
 
-    // 2025 01 31 - 한디리 오류로 임시 주석처리
-    // const koreanbotsVoteData = await this.koreanbotsClient.mybot.checkVote(
-    //   user.id,
-    // );
+    // const { data: koreanbots } = await firstValueFrom(
+    //   this.httpService
+    //     .get<{
+    //       code: number;
+    //       data: {
+    //         voted: boolean;
+    //         lastVote: number;
+    //       };
+    //       version: 2;
+    //     }>(
+    //       `https://koreanbots.dev/api/v2/bots/${process.env.DISCORD_CLIENT_ID}/vote?userID=${user.id}`,
+    //       {
+    //         headers: {
+    //           Authorization: process.env.KOREANBOTS_TOKEN,
+    //         },
+    //       },
+    //     )
+    //     .pipe(
+    //       catchError((err: AxiosError) => {
+    //         this.logger.error(
+    //           `CheckKoreanbotsVoted Error => ${JSON.stringify(err.response.data)}`,
+    //         );
 
-    const koreanbotsVoteData = { voted: true, lastVote: 0 }
+    //         throw new APIException(
+    //           err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
+    //           (
+    //             err.response.data as {
+    //               code: number;
+    //               message: string;
+    //               version: 2;
+    //             }
+    //           )?.message || '내부 서버 오류가 발생했습니다.',
+    //         );
+    //       }),
+    //     ),
+    // );
+    // const koreanbotsVoteData = koreanbots.data;
+
+    // 2025-01-31 한디리 하트체크 bypass
+    const koreanbotsVoteData = { voted: true, lastVote: 0 };
 
     // TODO: 커스텀 도메인 기능 추가
 

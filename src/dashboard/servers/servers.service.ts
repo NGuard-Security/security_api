@@ -28,6 +28,37 @@ export class ServersService {
     userId: string,
     now?: string,
   ): Promise<RESTGetAPICurrentUserGuildsResult> {
+    const botGuilds = await this.getBotGuilds();
+    const userGuilds = (await this.getUserGuilds()).filter(
+      (guild) => (Number(guild.permissions) & 0x20) == 0x20 || guild.owner,
+    ); // 권한 있는 서버만 필터링
+
+    // 봇이 초대되어있는지 확인
+    userGuilds.forEach((guild) => {
+      if (botGuilds.find((x) => x.id === guild.id)) {
+        // 봇이 초대되어 있는 경우임.
+        // guild값에 isInvited를 true로 추가함.
+        guild['isInvited'] = true;
+      } else {
+        // 봇이 초대되어 있지 않은 경우임.
+        // guild값에 isInvited를 false로 추가함.
+        guild['isInvited'] = false;
+      }
+    });
+
+    userGuilds.sort((a, b) => a.name.localeCompare(b.name, 'ko-KR'));
+
+    if (now) {
+      // now 값에 해당하는 서버 배열에서 맨 앞으로 이동함.
+      const nowGuild = userGuilds.find((x) => x.id === now);
+      userGuilds.splice(userGuilds.indexOf(nowGuild), 1);
+      userGuilds.unshift(nowGuild);
+    }
+
+    return userGuilds;
+  }
+
+  async getUserGuilds(): Promise<RESTGetAPICurrentUserGuildsResult> {
     let userGuilds: RESTGetAPICurrentUserGuildsResult;
 
     const cachedCurrentUserGuild =
@@ -83,11 +114,10 @@ export class ServersService {
       userGuilds = data;
     }
 
-    // 권한 있는 서버만 필터링
-    userGuilds = userGuilds.filter(
-      (guild) => (Number(guild.permissions) & 0x20) == 0x20 || guild.owner,
-    );
+    return userGuilds;
+  }
 
+  async getBotGuilds(): Promise<RESTGetAPICurrentUserGuildsResult> {
     let botGuilds: RESTGetAPICurrentUserGuildsResult = [];
 
     const cachedBotGuilds =
@@ -158,28 +188,6 @@ export class ServersService {
       botGuilds = data;
     }
 
-    // 봇이 초대되어있는지 확인
-    userGuilds.forEach((guild) => {
-      if (botGuilds.find((x) => x.id === guild.id)) {
-        // 봇이 초대되어 있는 경우임.
-        // guild값에 isInvited를 true로 추가함.
-        guild['isInvited'] = true;
-      } else {
-        // 봇이 초대되어 있지 않은 경우임.
-        // guild값에 isInvited를 false로 추가함.
-        guild['isInvited'] = false;
-      }
-    });
-
-    userGuilds.sort((a, b) => a.name.localeCompare(b.name, 'ko-KR'));
-
-    if (now) {
-      // now 값에 해당하는 서버 배열에서 맨 앞으로 이동함.
-      const nowGuild = userGuilds.find((x) => x.id === now);
-      userGuilds.splice(userGuilds.indexOf(nowGuild), 1);
-      userGuilds.unshift(nowGuild);
-    }
-
-    return userGuilds;
+    return botGuilds;
   }
 }

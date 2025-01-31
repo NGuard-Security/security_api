@@ -20,7 +20,8 @@ export class TransformInterceptor implements NestInterceptor {
         const response = ctx.getResponse<FastifyReply>();
         const request = ctx.getRequest<FastifyRequest>();
 
-        if (request.url === '/') return data;
+        if (request.url === '/' || request.url === '/www/status/webhook')
+          return data;
 
         return {
           code: response.statusCode.toString().startsWith('2')

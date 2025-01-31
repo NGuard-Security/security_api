@@ -1,7 +1,12 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Body, Controller, Get, Post, HttpCode, Logger } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { WwwService } from './www.service';
+
+import {
+  DiscordEventPayloadDto,
+  DiscordWebhookType,
+} from './dto/discordEventPayload.dto';
 
 @ApiTags('Main - Rendering Data API')
 @Controller('www')
@@ -21,5 +26,21 @@ export class WwwController {
     servers?: number;
   }> {
     return await this.wwwService.getStatus();
+  }
+
+  @Post('status/webhook')
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'Discord Webhook for Bot Status Update',
+    description:
+      'Discord 웹훅을 통하여 한디리 (https://koreanbots.dev)의 봇 상태를 업데이트 합니다.',
+  })
+  async updateStatusHook(
+    @Body() body: DiscordEventPayloadDto,
+  ): Promise<boolean> {
+    if (body.type === DiscordWebhookType.PING) return;
+
+    await this.wwwService.updateStatus(body);
+    return true;
   }
 }
