@@ -8,12 +8,12 @@ import { Bot, Koreanbots } from 'koreanbots';
 export class WwwService {
   private readonly logger = new Logger(WwwService.name);
 
-  private readonly koreanbotsClient = new Koreanbots({
-    clientID: process.env.DISCORD_CLIENT_ID,
-    api: {
-      token: process.env.KOREANBOTS_TOKEN,
-    },
-  });
+  // private readonly koreanbotsClient = new Koreanbots({
+  //   clientID: process.env.DISCORD_CLIENT_ID,
+  //   api: {
+  //     token: process.env.KOREANBOTS_TOKEN,
+  //   },
+  // });
 
   constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
 
@@ -21,40 +21,46 @@ export class WwwService {
     votes?: number;
     servers?: number;
   }> {
-    try {
-      let koreanbots: Bot;
+    // try {
+    //   let koreanbots: Bot;
   
-      const redisCachedKoreanbots =
-        await this.cacheManager.get<Bot>('koreanbots');
+    //   const redisCachedKoreanbots =
+    //     await this.cacheManager.get<Bot>('koreanbots');
   
-      if (redisCachedKoreanbots) {
-        koreanbots = redisCachedKoreanbots;
-      } else {
-        const locallyCachedKoreanbots = this.koreanbotsClient.bots.cache.get(
-          process.env.DISCORD_CLIENT_ID,
-        );
+    //   if (redisCachedKoreanbots) {
+    //     koreanbots = redisCachedKoreanbots;
+    //   } else {
+    //     const locallyCachedKoreanbots = this.koreanbotsClient.bots.cache.get(
+    //       process.env.DISCORD_CLIENT_ID,
+    //     );
   
-        if (locallyCachedKoreanbots) {
-          koreanbots = locallyCachedKoreanbots;
-        } else {
-          koreanbots = this.koreanbotsClient.mybot.bot;
-          await this.cacheManager.set('koreanbots', koreanbots, 600000);
-        }
-      }
+    //     if (locallyCachedKoreanbots) {
+    //       koreanbots = locallyCachedKoreanbots;
+    //     } else {
+    //       koreanbots = this.koreanbotsClient.mybot.bot;
+    //       await this.cacheManager.set('koreanbots', koreanbots, 600000);
+    //     }
+    //   }
   
-      this.logger.debug(koreanbots);
+    //   this.logger.debug(koreanbots);
   
-      return {
-        servers: koreanbots.servers,
-        votes: koreanbots.votes,
-      };
-    } catch (e) {
-      this.logger.error(e);
+    //   return {
+    //     servers: koreanbots.servers,
+    //     votes: koreanbots.votes,
+    //   };
+    // } catch (e) {
+    //   this.logger.error(e);
 
-      return {
-        servers: null,
-        votes: null,
-      };
+    //   return {
+    //     servers: null,
+    //     votes: null,
+    //   };
+    // }
+
+    // 한디리 서버 오류로 임시 주석처리
+    return {
+      servers: null,
+      votes: null,
     }
   }
 }
