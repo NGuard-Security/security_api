@@ -24,7 +24,7 @@
     "@nestjs/platform-fastify": "^10.4.15",
     "@nestjs/swagger": "^7.4.2",
     "axios": "^1.7.9",
-    "cache-manager": "^5.7.6",
+    "cache-manager": "^6.0.0",
     "cache-manager-redis-yet": "^5.1.5",
     "discord-api-types": "^0.37.118",
     "fastify": "^4.29.0",
